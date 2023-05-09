@@ -19,7 +19,7 @@
           "apps/key-master-demo/src/favicon.ico",
           "apps/key-master-demo/src/assets"
         ],
-        "styles": ["apps/key-master-demo/src/styles.css"],
+        "styles": ["apps/key-master-demo/src/styles.scss"],
         "scripts": []
       },
       "configurations": {

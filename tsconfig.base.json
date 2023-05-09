@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@key-master/ng-key-master": ["libs/ng-key-master/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

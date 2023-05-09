@@ -1,0 +1,17 @@
+
+<div class="border-2 border-gray-500 rounded w-96" kmKeysContainer name="Text-Editierung" [strategy]="strategyOptions.merge()">
+  <ul class="flex justify-end gap-6 px-4 py-1">
+    <li>
+      <button class="p-2 bg-gray-200 rounded" kmKeyBinding [keyBinding]="boldKeyBinding" (click)="toggleBold()">Bold</button>
+    </li>
+    <li>
+      <button class="p-2 bg-gray-200 rounded" kmKeyBinding [keyBinding]="italicKeyBinding" (click)="toggleItalic()">Italic</button>
+    </li>
+  </ul>
+
+  <hr/>
+
+  <textarea class="flex w-full {{bold ? 'font-bold' : ''}} {{italic ? 'italic' : ''}}">
+    Try making this text bold (B) or italic (I). For now Uppercase i and b not working in this textarea :c
+  </textarea>
+</div>

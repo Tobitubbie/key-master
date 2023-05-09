@@ -1,0 +1,10 @@
+:host {
+  // inherit overlay-configuration, so components html-element does not break behaviour
+  height: inherit;
+  min-height: inherit;
+  max-height: inherit;
+
+  width: inherit;
+  min-width: inherit;
+  max-width: inherit;
+}

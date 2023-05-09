@@ -1,1 +1,68 @@
-<key-master-nx-welcome></key-master-nx-welcome> <router-outlet></router-outlet>
+
+<section class="space-y-8 h-[200vh]">
+
+  <div>
+    <h1>Out-of-Scope Bereich</h1>
+    <button>Zzzz</button>
+  </div>
+
+  <hr/>
+
+  <key-master-textarea></key-master-textarea>
+
+  <hr/>
+
+  <div kmKeysContainer name="Empty Container">
+    <button>What about empty Containers O.o</button>
+  </div>
+
+  <div kmKeysContainer class="border border-red-500">
+    <div kmKeyBinding [keyBinding]="dummyKeyBinding('b')">
+      <button>New Area</button>
+      <div kmKeysContainer name="Nested Area" class="border border-amber-500">
+        <button>Nested Area</button>
+        <div kmKeyBinding [keyBinding]="dummyKeyBinding('a')">
+          <div>
+            <div>
+              <button kmKeyBinding [keyBinding]="dummyKeyBinding('c')">B-KeyBinding-Button</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-500" kmKeysContainer [strategy]="strategyOptions.exclusive()">
+    Bereich A
+
+    <div>
+      <button kmKeyBinding [keyBinding]="dummyKeyBinding('a')">FOO</button>
+    </div>
+
+    <div kmKeyBinding [keyBinding]="dummyKeyBinding('b')">
+      Bereich A-Nested (belongs to Container A, but has additional key-bindings)
+      <input type="text" value="FOO_BAR" />
+    </div>
+  </div>
+
+  <div class="bg-green-500" kmKeysContainer>
+    Bereich B
+    <button>BAR</button>
+  </div>
+
+  <div class="bg-amber-500" kmKeysContainer name="List-Navigation">
+    Bereicht C
+
+    <ul>
+      <!-- attr tabindex necessary to make div focusable -->
+      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [keyBinding]="dummyKeyBinding(i)">ListenElement #{{i}}</li>
+    </ul>
+  </div>
+
+  <hr/>
+
+  <h1>Visualization</h1>
+
+  <button (click)="overlayService.toggleOverlay()">Toggle Overlay</button>
+
+</section>
