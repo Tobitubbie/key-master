@@ -13,7 +13,10 @@ import {
 } from './key-bindings-container.directive';
 import { VisualizationStrategyOptions } from './visualizer/visualization-strategies';
 
-@Directive({ selector: '[kmKeyBinding]' })
+@Directive({
+  selector: '[kmKeyBinding]',
+  standalone: true,
+})
 export class KeyBindingDirective implements AfterViewInit, OnDestroy {
   @Input()
   keyBinding!: KeyBinding;

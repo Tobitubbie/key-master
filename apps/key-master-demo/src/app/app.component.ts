@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {
   ACTIVE_ELEMENT,
   ActiveElement,
-  KeyBinding,
+  KeyBinding, KeyBindingDirective,
   KeyMasterService,
   NgKeyMasterModule,
   StrategyOptions,
@@ -24,6 +24,7 @@ import {KeyBindingsContainerDirective} from "@key-master/ng-key-master";
     TextareaComponent,
     NgForOf,
     KeyBindingsContainerDirective,
+    KeyBindingDirective,
   ],
   selector: 'key-master-root',
   templateUrl: './app.component.html',

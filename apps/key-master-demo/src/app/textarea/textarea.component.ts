@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {
-  KeyBinding,
+  KeyBinding, KeyBindingDirective,
   KeyBindingsContainerDirective,
   NgKeyMasterModule,
   StrategyOptions,
@@ -11,7 +11,7 @@ import {
   selector: 'key-master-textarea',
   templateUrl: './textarea.component.html',
   standalone: true,
-  imports: [NgKeyMasterModule, KeyBindingsContainerDirective]
+  imports: [NgKeyMasterModule, KeyBindingsContainerDirective, KeyBindingDirective]
 })
 export class TextareaComponent {
 
