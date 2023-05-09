@@ -9,6 +9,8 @@ import {
   NgKeyMasterModule,
   StrategyOptions,
   VisualizationService,
+  VisualizationStrategy,
+  VisualizationStrategyOptions,
 } from '@key-master/ng-key-master';
 import {TextareaComponent} from "./textarea/textarea.component";
 import {NgForOf} from "@angular/common";
@@ -33,7 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public readonly activeElement$: Observable<ActiveElement>,
     public readonly keyMasterService: KeyMasterService,
     public readonly overlayService: VisualizationService,
-    public readonly strategyOptions: StrategyOptions
+    public readonly strategyOptions: StrategyOptions,
+    public readonly visualizationStrategyOptions: VisualizationStrategyOptions,
   ) {
   }
 
@@ -47,11 +50,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.globalKeyBindings.push(key);
   }
 
-  dummyKeyBinding(key: string): KeyBinding {
+  dummyKeyBinding(key: string, strategy?: VisualizationStrategy): KeyBinding {
     return {
       key,
       action: () => console.log(`${key} pressed!`),
       label: `TestCommand_${key}`,
+      strategy: strategy,
     };
   }
 

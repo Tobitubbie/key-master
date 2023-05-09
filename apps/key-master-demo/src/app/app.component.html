@@ -56,6 +56,7 @@
     <ul>
       <!-- attr tabindex necessary to make div focusable -->
       <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [keyBinding]="dummyKeyBinding(i)">ListenElement #{{i}}</li>
+      <li (click)="onListElementClick('6')" tabindex="0" kmKeyBinding [keyBinding]="dummyKeyBinding('6', this.visualizationStrategyOptions.noop())">ListenElement #6 (my VisualizationStrategy is Noop)</li>
     </ul>
   </div>
 
