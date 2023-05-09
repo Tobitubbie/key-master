@@ -19,6 +19,7 @@ export const KEY_BINDINGS_CONTAINER_SELECTOR = '[kmKeysContainer]';
 
 @Directive({
   selector: '[kmKeysContainer]', // update KEY_BINDINGS_CONTAINER_SELECTOR on change
+  standalone: true,
 })
 export class KeyBindingsContainerDirective
   extends Container

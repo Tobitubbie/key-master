@@ -14,6 +14,7 @@ import {
 } from '@key-master/ng-key-master';
 import {TextareaComponent} from "./textarea/textarea.component";
 import {NgForOf} from "@angular/common";
+import {KeyBindingsContainerDirective} from "@key-master/ng-key-master";
 
 @Component({
   standalone: true,
@@ -22,6 +23,7 @@ import {NgForOf} from "@angular/common";
     NgKeyMasterModule,
     TextareaComponent,
     NgForOf,
+    KeyBindingsContainerDirective,
   ],
   selector: 'key-master-root',
   templateUrl: './app.component.html',
