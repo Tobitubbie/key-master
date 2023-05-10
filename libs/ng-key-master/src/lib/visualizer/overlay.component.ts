@@ -1,14 +1,16 @@
-import { Component, TrackByFunction } from '@angular/core';
-import { transition, trigger, useAnimation } from '@angular/animations';
-import { VisualizationService } from './visualization.service';
-import { KeyBinding } from '../models';
-import { fadeIn, zoomIn, zoomOut } from './animations';
-import { KeyValue } from '@angular/common';
+import {Component, TrackByFunction} from '@angular/core';
+import {transition, trigger, useAnimation} from '@angular/animations';
+import {VisualizationService} from './visualization.service';
+import {KeyBinding} from '../models';
+import {fadeIn, zoomIn, zoomOut} from './animations';
+import {AsyncPipe, KeyValue, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'km-overlay',
   templateUrl: 'overlay.component.html',
   styleUrls: ['overlay.component.scss'],
+  standalone: true,
+  imports: [NgForOf, KeyValuePipe, AsyncPipe, NgIf],
   animations: [
     trigger('zoom', [
       transition(':enter', useAnimation(zoomIn)),
@@ -29,5 +31,6 @@ export class OverlayComponent {
     _b: KeyValue<string, KeyBinding[]>
   ): number => 1;
 
-  constructor(public readonly overlayService: VisualizationService) {}
+  constructor(public readonly overlayService: VisualizationService) {
+  }
 }

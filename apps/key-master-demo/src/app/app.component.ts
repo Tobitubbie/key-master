@@ -4,9 +4,10 @@ import {Observable} from 'rxjs';
 import {
   ACTIVE_ELEMENT,
   ActiveElement,
-  KeyBinding, KeyBindingDirective,
+  KeyBinding,
+  KeyBindingDirective,
+  KeyBindingsContainerDirective,
   KeyMasterService,
-  NgKeyMasterModule,
   StrategyOptions,
   VisualizationService,
   VisualizationStrategy,
@@ -14,13 +15,11 @@ import {
 } from '@key-master/ng-key-master';
 import {TextareaComponent} from "./textarea/textarea.component";
 import {NgForOf} from "@angular/common";
-import {KeyBindingsContainerDirective} from "@key-master/ng-key-master";
 
 @Component({
   standalone: true,
   imports: [
     RouterModule,
-    NgKeyMasterModule,
     TextareaComponent,
     NgForOf,
     KeyBindingsContainerDirective,
