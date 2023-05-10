@@ -1,17 +1,12 @@
-import {
-  Injectable,
-  Injector,
-  Renderer2,
-  RendererFactory2,
-} from '@angular/core';
-import { VisualizationService } from './visualization.service';
-import { KeyBinding } from '../models';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import {inject, Injectable, Injector, Renderer2, RendererFactory2,} from '@angular/core';
+import {VisualizationService} from './visualization.service';
+import {KeyBinding} from '../models';
+import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {
   KEY_BINDING_OVERLAY_DATA,
   KeyBindingOverlayComponent,
 } from './key-binding-overlay/key-binding-overlay.component';
-import { ComponentPortal } from '@angular/cdk/portal';
+import {ComponentPortal} from '@angular/cdk/portal';
 
 export interface VisualizationStrategy {
   show(): void;
@@ -23,6 +18,8 @@ export interface VisualizationStrategy {
   destroy(): void;
 }
 
+export type VisualizationStrategyOption = keyof VisualizationStrategyOptions;
+
 /**
  * Options / Strategies for how an KeyBinding is visualized.
  *
@@ -31,20 +28,14 @@ export interface VisualizationStrategy {
  */
 @Injectable({ providedIn: 'root' })
 export class VisualizationStrategyOptions {
-  readonly #renderer: Renderer2;
-
-  constructor(
-    private overlayService: Overlay,
-    private visualizationService: VisualizationService,
-    private rendererFactory: RendererFactory2
-  ) {
-    this.#renderer = rendererFactory.createRenderer(null, null);
-  }
+  readonly #renderer = inject(RendererFactory2).createRenderer(null, null);
+  readonly #overlayService = inject(Overlay);
+  readonly #visualizationService = inject(VisualizationService);
 
   overlay = () =>
     new OverlayVisualizationStrategy(
-      this.overlayService,
-      this.visualizationService
+      this.#overlayService,
+      this.#visualizationService
     );
   noop = () => new NoopVisualizationStrategy();
   inline = () => new InlineVisualizationStrategy(this.#renderer);
@@ -79,7 +70,8 @@ export class NoopVisualizationStrategy implements VisualizationStrategy {
 export class InlineVisualizationStrategy implements VisualizationStrategy {
   element: HTMLSpanElement = this.renderer.createElement('span');
 
-  constructor(private readonly renderer: Renderer2) {}
+  constructor(private readonly renderer: Renderer2) {
+  }
 
   show() {
     this.renderer.removeClass(this.element, 'hidden');

@@ -1,16 +1,10 @@
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { Container } from './container';
-import { IgnoreTarget, KeyBinding } from './models';
-import { KeyMasterService } from './key-master.service';
-import { Strategy, StrategyOptions } from './strategies';
-import { DEFAULT_IGNORE_TARGETS } from './utils';
+import {Directive, ElementRef, HostListener, inject, Input, OnDestroy, OnInit,} from '@angular/core';
+import {Container} from './container';
+import {IgnoreTarget, KeyBinding} from './models';
+import {KeyMasterService} from './key-master.service';
+import {Strategy, StrategyOptions} from './strategies';
+import {DEFAULT_IGNORE_TARGETS} from './utils';
+import {DEFAULT_CONTAINER_STRATEGY} from "./tokens";
 
 export const ADD_KEY_EVENT_NAME = 'removeKey';
 export const REMOVE_KEY_EVENT_NAME = 'addKey';
@@ -29,7 +23,7 @@ export class KeyBindingsContainerDirective
   override ignoreTargets: IgnoreTarget[] = DEFAULT_IGNORE_TARGETS;
 
   @Input()
-  override strategy: Strategy = this.strategyOptions.bubble();
+  override strategy: Strategy = inject(DEFAULT_CONTAINER_STRATEGY)();
 
   @Input()
   override name: string | undefined;

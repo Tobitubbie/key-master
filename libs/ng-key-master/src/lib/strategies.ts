@@ -1,5 +1,5 @@
 import { KeyMasterService } from './key-master.service';
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import { Container } from './container';
 
 export interface Strategy {
@@ -9,6 +9,8 @@ export interface Strategy {
   ) => Container[];
 }
 
+export type StrategyOption = keyof StrategyOptions;
+
 /**
  * Options / Strategies for how an KeyboardEvent is processed and how parent containers are discovered.
  *
@@ -17,11 +19,12 @@ export interface Strategy {
  */
 @Injectable({ providedIn: 'root' })
 export class StrategyOptions {
-  constructor(private keyMasterService: KeyMasterService) {}
 
-  bubble = () => new BubbleStrategy(this.keyMasterService);
+  #keyMasterService = inject(KeyMasterService);
+
+  bubble = () => new BubbleStrategy(this.#keyMasterService);
   exclusive = () => new ExclusiveStrategy();
-  merge = () => new MergeStrategy(this.keyMasterService);
+  merge = () => new MergeStrategy(this.#keyMasterService);
 }
 
 /**

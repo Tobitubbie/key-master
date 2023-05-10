@@ -1,17 +1,11 @@
-import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  Input,
-  OnDestroy,
-} from '@angular/core';
-import { KeyBinding } from './models';
+import {AfterViewInit, Directive, ElementRef, inject, Input, OnDestroy,} from '@angular/core';
+import {KeyBinding} from './models';
 import {
   ADD_KEY_EVENT_NAME,
   KEY_BINDINGS_CONTAINER_SELECTOR,
   REMOVE_KEY_EVENT_NAME,
 } from './key-bindings-container.directive';
-import { VisualizationStrategyOptions } from './visualizer/visualization-strategies';
+import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
 
 @Directive({
   selector: '[kmKeyBinding]',
@@ -23,10 +17,12 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
 
   #assignedContainer: Element | null = null;
 
+  #defaultStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
+
   constructor(
     private readonly elementRef: ElementRef<Element>,
-    private readonly visualizationStrategyOptions: VisualizationStrategyOptions
-  ) {}
+  ) {
+  }
 
   ngAfterViewInit() {
     // TODO: should be checked in OnChanges-Lifecycle
@@ -45,7 +41,7 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
           element: this.elementRef.nativeElement,
           strategy:
             this.keyBinding.strategy ??
-            this.visualizationStrategyOptions.overlay(),
+            this.#defaultStrategy,
         },
       })
     );
@@ -59,7 +55,7 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
           element: this.elementRef.nativeElement,
           strategy:
             this.keyBinding.strategy ??
-            this.visualizationStrategyOptions.overlay(),
+            this.#defaultStrategy,
         },
       })
     );
