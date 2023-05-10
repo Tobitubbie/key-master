@@ -11,6 +11,7 @@ export const KEY_BINDING_OVERLAY_DATA =
   selector: 'km-key-binding-overlay',
   templateUrl: './key-binding-overlay.component.html',
   animations: [trigger('zoom', [transition(':enter', useAnimation(zoomIn))])],
+  standalone: true,
 })
 export class KeyBindingOverlayComponent {
   constructor(
