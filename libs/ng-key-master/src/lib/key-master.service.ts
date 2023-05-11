@@ -1,21 +1,19 @@
-import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
-import { ACTIVE_ELEMENT, ActiveElement } from './active-element.token';
-import { KeyBinding } from './models';
-import { DOCUMENT } from '@angular/common';
-import { Container } from './container';
-import { KEY_BINDINGS_CONTAINER_SELECTOR } from './key-bindings-container.directive';
+import {inject, Inject, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
+import {ACTIVE_ELEMENT, ActiveElement} from './active-element.token';
+import {KeyBinding} from './models';
+import {DOCUMENT} from '@angular/common';
+import {Container} from './container';
+import {KEY_BINDINGS_CONTAINER_SELECTOR} from './key-bindings-container.directive';
+import {GLOBAL_CONTAINER} from "./tokens";
 
 @Injectable({
   providedIn: 'root',
 })
 export class KeyMasterService {
   // TODO: get element to add global-container to passed as parameter/injection-token
-  readonly globalContainer: Container = new Container(
-    'global',
-    this.document.body
-  );
+  readonly globalContainer: Container = inject(GLOBAL_CONTAINER);
 
   readonly #containers: Map<string, Container> = new Map();
 
@@ -25,8 +23,9 @@ export class KeyMasterService {
     @Inject(DOCUMENT) private readonly document: Document
   ) {
     // pass keydown events to global-container
-    this.document.body.addEventListener('keydown', (event) =>
-      this.globalContainer.onKeyboardEvent(event)
+    this.globalContainer.element?.addEventListener('keydown', (event) => {
+        if (event instanceof KeyboardEvent) this.globalContainer.onKeyboardEvent(event);
+      }
     );
   }
 

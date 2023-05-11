@@ -12,14 +12,14 @@
 
   <hr/>
 
-  <div kmKeysContainer name="Empty Container">
-    <button>What about empty Containers O.o</button>
+  <div kmKeysContainer name="Empty Container" [strategy]="strategyOptions.exclusive()">
+    <button>What about empty exclusive Containers O.o</button>
   </div>
 
-  <div kmKeysContainer class="border border-red-500">
+  <div class="border border-red-500" kmKeysContainer>
     <div kmKeyBinding [keyBinding]="dummyKeyBinding('b')">
       <button>New Area</button>
-      <div kmKeysContainer name="Nested Area" class="border border-amber-500">
+      <div class="border border-amber-500" kmKeysContainer name="Nested Area" [strategy]="strategyOptions.bubble()">
         <button>Nested Area</button>
         <div kmKeyBinding [keyBinding]="dummyKeyBinding('a')">
           <div>

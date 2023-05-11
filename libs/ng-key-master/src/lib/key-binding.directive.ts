@@ -6,6 +6,7 @@ import {
   REMOVE_KEY_EVENT_NAME,
 } from './key-bindings-container.directive';
 import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
+import {VisualizationStrategy} from "./visualizer/visualization-strategies";
 
 @Directive({
   selector: '[kmKeyBinding]',
@@ -17,7 +18,7 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
 
   #assignedContainer: Element | null = null;
 
-  #defaultStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
+  #defaultStrategy: VisualizationStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
 
   constructor(
     private readonly elementRef: ElementRef<Element>,
