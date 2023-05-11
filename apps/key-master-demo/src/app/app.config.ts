@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     provideAnimations(),
     provideKeyMaster({
-      defaultContainerStrategy: 'exclusive',
+      defaultContainerStrategy: 'bubble',
       defaultVisualizationStrategy: 'inline'
     }),
   ],
