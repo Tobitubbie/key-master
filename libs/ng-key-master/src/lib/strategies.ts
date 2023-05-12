@@ -22,9 +22,18 @@ export class StrategyOptions {
 
   #keyMasterService = inject(KeyMasterService);
 
+  noop = () => new NoopStrategy();
   bubble = () => new BubbleStrategy(this.#keyMasterService);
   exclusive = () => new ExclusiveStrategy();
   merge = () => new MergeStrategy(this.#keyMasterService);
+}
+
+export class NoopStrategy implements Strategy {
+  handleKeyBoardEvent(_event: KeyboardEvent, _handled: boolean) { /* NOOP */}
+
+  discoverParentContainers(_element: Element | null | undefined): Container[] {
+    return [];
+  }
 }
 
 /**

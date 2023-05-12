@@ -1,5 +1,5 @@
 
-<div class="border-2 border-gray-500 rounded w-96" kmKeysContainer name="Text-Editierung" [strategy]="strategyOptions.merge()">
+<div class="border-2 border-gray-500 rounded w-96" kmKeysContainer name="Text-Editierung" [strategy]="strategyOptions.merge()" [ignoreTargets]="[]">
   <ul class="flex justify-end gap-6 px-4 py-1">
     <li>
       <button class="p-2 bg-gray-200 rounded" kmKeyBinding [keyBinding]="boldKeyBinding" (click)="toggleBold()">Bold</button>

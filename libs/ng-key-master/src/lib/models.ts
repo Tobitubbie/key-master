@@ -12,3 +12,9 @@ export type KeyBinding = {
 };
 
 export type IgnoreTarget = typeof Element;
+
+export type GlobalContainerConfig = {
+  name: string,
+  ignoreTargets: IgnoreTarget[],
+  element: Element,
+}

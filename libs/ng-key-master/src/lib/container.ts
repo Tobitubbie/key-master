@@ -1,29 +1,20 @@
-import { DEFAULT_IGNORE_TARGETS } from './utils';
-import { IgnoreTarget, KeyBinding } from './models';
-import { ExclusiveStrategy, Strategy } from './strategies';
+import {IgnoreTarget, KeyBinding} from './models';
+import {NoopStrategy, Strategy} from './strategies';
 
-export class Container {
+export abstract class Container {
+
   readonly keyBindings: Map<string, KeyBinding> = new Map();
 
-  ignoreTargets: IgnoreTarget[] = DEFAULT_IGNORE_TARGETS;
+  ignoreTargets: IgnoreTarget[] = [];
+  strategy: Strategy = new NoopStrategy();
 
   name: string | undefined;
   registrationId: string | undefined;
   element: Element | undefined;
 
-  strategy: Strategy = new ExclusiveStrategy();
-
-  constructor(_name?: string, _element?: Element, _strategy?: Strategy) {
-    this.name = _name;
-    this.element = _element;
-    if (_strategy) {
-      this.strategy = _strategy;
-    }
-  }
-
   addKeyBinding(keyBinding: KeyBinding): void {
     console.log(
-      `[CONTAINER] ${this.registrationId ?? 'global'}: Adding KeyBinding ${
+      `[CONTAINER] ${this.registrationId ?? this.name}: Adding KeyBinding ${
         keyBinding.label
       }`
     );
@@ -46,6 +37,8 @@ export class Container {
   }
 
   onKeyboardEvent(event: KeyboardEvent): void {
+    let handled = false;
+
     if (
       !this.ignoreTargets.some(
         (ignoreTarget) => event.target instanceof ignoreTarget
@@ -53,14 +46,13 @@ export class Container {
     ) {
       const keyBinding = this.keyBindings.get(event.key);
 
-      let handled = false;
       if (keyBinding) {
         keyBinding.action();
         handled = true;
       }
-
-      this.strategy.handleKeyBoardEvent(event, handled);
     }
+
+    this.strategy.handleKeyBoardEvent(event, handled);
   }
 
   discoverParentContainers(): Container[] {

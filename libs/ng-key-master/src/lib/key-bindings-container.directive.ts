@@ -3,8 +3,7 @@ import {Container} from './container';
 import {IgnoreTarget, KeyBinding} from './models';
 import {KeyMasterService} from './key-master.service';
 import {Strategy, StrategyOptions} from './strategies';
-import {DEFAULT_IGNORE_TARGETS} from './utils';
-import {DEFAULT_CONTAINER_STRATEGY} from "./tokens";
+import {DEFAULT_CONTAINER_STRATEGY, DEFAULT_IGNORE_TARGETS} from "./tokens";
 
 export const ADD_KEY_EVENT_NAME = 'removeKey';
 export const REMOVE_KEY_EVENT_NAME = 'addKey';
@@ -20,7 +19,7 @@ export class KeyBindingsContainerDirective
   implements OnInit, OnDestroy
 {
   @Input()
-  override ignoreTargets: IgnoreTarget[] = DEFAULT_IGNORE_TARGETS;
+  override ignoreTargets: IgnoreTarget[] = inject(DEFAULT_IGNORE_TARGETS);
 
   @Input()
   override strategy: Strategy = inject(DEFAULT_CONTAINER_STRATEGY)();

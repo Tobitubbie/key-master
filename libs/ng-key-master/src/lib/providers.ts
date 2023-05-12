@@ -1,42 +1,62 @@
 import {EnvironmentProviders, inject, makeEnvironmentProviders} from "@angular/core";
 import {Strategy, StrategyOption, StrategyOptions} from "./strategies";
-import {DEFAULT_CONTAINER_STRATEGY, DEFAULT_VISUALIZATION_STRATEGY, GLOBAL_CONTAINER} from "./tokens";
+import {
+  DEFAULT_CONTAINER_STRATEGY,
+  DEFAULT_IGNORE_TARGETS,
+  DEFAULT_VISUALIZATION_STRATEGY,
+  GLOBAL_CONTAINER_CONFIG
+} from "./tokens";
 import {
   VisualizationStrategy,
   VisualizationStrategyOption,
   VisualizationStrategyOptions
 } from "./visualizer/visualization-strategies";
-import {Container} from "./container";
+import {GlobalContainerConfig, IgnoreTarget} from "./models";
 
-const defaultConfig: KeyMasterConfig = {
-  defaultContainerStrategy: 'bubble',
-  defaultVisualizationStrategy: 'overlay',
-  globalContainer: () => new Container('Global', document.documentElement),
-}
 
 export interface KeyMasterConfig {
-  defaultContainerStrategy: StrategyOption;
-  defaultVisualizationStrategy: VisualizationStrategyOption;
-  globalContainer: () => Container;
+  defaultContainerStrategy?: StrategyOption;
+  defaultVisualizationStrategy?: VisualizationStrategyOption;
+  defaultIgnoreTargets?: IgnoreTarget[];
+  globalContainerConfig?: Partial<GlobalContainerConfig>;
 }
 
-export function provideKeyMaster(config: Partial<KeyMasterConfig> = {}): EnvironmentProviders {
+export const defaultConfig: Required<KeyMasterConfig> = {
+  defaultContainerStrategy: 'bubble',
+  defaultVisualizationStrategy: 'overlay',
+  defaultIgnoreTargets: [HTMLInputElement, HTMLTextAreaElement],
+  globalContainerConfig: {
+    name: 'Global',
+    element: document.documentElement,
+    ignoreTargets: [],
+  }
+}
 
-  const kmConfig = {...defaultConfig, ...config};
+
+export function provideKeyMaster(userConfig: KeyMasterConfig = {}): EnvironmentProviders {
+
+  const config: Required<KeyMasterConfig> = {
+    ...defaultConfig, ...userConfig,
+    globalContainerConfig: {...defaultConfig.globalContainerConfig, ...userConfig.globalContainerConfig}
+  };
 
   return makeEnvironmentProviders([
     {
       provide: DEFAULT_CONTAINER_STRATEGY,
-      useValue: () => createContainerStrategy(kmConfig.defaultContainerStrategy), // return fn instead of value to create a new instance foreach usage
+      useValue: () => createContainerStrategy(config.defaultContainerStrategy), // return fn instead of value to create a new instance foreach usage
     },
     {
       provide: DEFAULT_VISUALIZATION_STRATEGY,
-      useValue: () => createVisualizationStrategy(kmConfig.defaultVisualizationStrategy), // return fn instead of value to create a new instance foreach usage
+      useValue: () => createVisualizationStrategy(config.defaultVisualizationStrategy), // return fn instead of value to create a new instance foreach usage
     },
     {
-      provide: GLOBAL_CONTAINER,
-      useValue: kmConfig.globalContainer(), // return fn instead of value -> prevents creation of two container (overwrite and default)
-    }
+      provide: DEFAULT_IGNORE_TARGETS,
+      useValue: config.defaultIgnoreTargets,
+    },
+    {
+      provide: GLOBAL_CONTAINER_CONFIG,
+      useValue: config.globalContainerConfig,
+    },
   ]);
 }
 
