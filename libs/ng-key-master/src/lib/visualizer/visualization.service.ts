@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
-import { OverlayComponent } from './overlay.component';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { KeyMasterService } from '../key-master.service';
-import { GlobalPositionStrategy, Overlay } from '@angular/cdk/overlay';
-import { map, pairwise, shareReplay, startWith, tap } from 'rxjs/operators';
-import { VisualizationStrategy } from './visualization-strategies';
-import { BehaviorSubject } from 'rxjs';
-import { KeyBinding } from '../models';
+import {Injectable} from '@angular/core';
+import {OverlayComponent} from './overlay.component';
+import {ComponentPortal} from '@angular/cdk/portal';
+import {KeyMasterService} from '../key-master.service';
+import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';
+import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
+import {VisualizationStrategy} from './visualization-strategies';
+import {BehaviorSubject} from 'rxjs';
+import {KeyBinding} from '../models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class VisualizationService {
   strategyRefs: Set<VisualizationStrategy> = new Set();
 
   activeKeyBindings$ = this.keyMasterService.getActiveKeyBindings().pipe(
-    startWith(new Map()),
+    startWith(new Map<string, KeyBinding[]>()),
     pairwise(),
     shareReplay(1),
     tap(([prev, cur]) => {
