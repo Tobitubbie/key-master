@@ -10,7 +10,6 @@ import {
   KeyMasterService,
   StrategyOptions,
   VisualizationService,
-  VisualizationStrategy,
   VisualizationStrategyOptions,
 } from '@key-master/ng-key-master';
 import {TextareaComponent} from "./textarea/textarea.component";
@@ -52,12 +51,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.globalKeyBindings.push(key);
   }
 
-  dummyKeyBinding(key: string, strategy?: VisualizationStrategy): KeyBinding {
+  dummyKeyBinding(key: string): KeyBinding {
     return {
       key,
       action: () => console.log(`${key} pressed!`),
       label: `TestCommand_${key}`,
-      strategy: strategy,
     };
   }
 

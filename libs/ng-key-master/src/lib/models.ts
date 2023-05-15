@@ -1,15 +1,18 @@
-import { VisualizationStrategy } from './visualizer/visualization-strategies';
+import {VisualizationStrategy} from './visualizer/visualization-strategies';
 
 // TODO: typify real keys
 export type Key = string;
 
-export type KeyBinding = {
+export type Shortcut = {
   key: Key;
   action: VoidFunction;
   label?: string;
-  element?: Element;
-  strategy?: VisualizationStrategy;
-};
+}
+
+export type KeyBinding = Shortcut & (
+  // enforces both or none of the properties is set
+  { element: Element; strategy: VisualizationStrategy; }
+  | { element?: never; strategy?: never; });
 
 export type IgnoreTarget = typeof Element;
 

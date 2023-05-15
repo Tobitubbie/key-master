@@ -28,14 +28,12 @@ export class TextareaComponent {
     key: 'B',
     action: () => this.toggleBold(),
     label: 'Text Bold',
-    strategy: this.visualizationStrategyOptions.overlay(),
   };
 
   italicKeyBinding: KeyBinding = {
     key: 'I',
     action: () => this.toggleItalic(),
     label: 'Text Italic',
-    strategy: this.visualizationStrategyOptions.inline(),
   };
 
   toggleBold() {

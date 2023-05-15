@@ -1,5 +1,5 @@
 import {AfterViewInit, Directive, ElementRef, inject, Input, OnDestroy,} from '@angular/core';
-import {KeyBinding} from './models';
+import {KeyBinding, Shortcut} from './models';
 import {
   ADD_KEY_EVENT_NAME,
   KEY_BINDINGS_CONTAINER_SELECTOR,
@@ -13,12 +13,14 @@ import {VisualizationStrategy} from "./visualizer/visualization-strategies";
   standalone: true,
 })
 export class KeyBindingDirective implements AfterViewInit, OnDestroy {
+
+  @Input({required: true, alias: 'kmKeyBinding'})
+  shortcut!: Shortcut;
+
   @Input()
-  keyBinding!: KeyBinding;
+  strategy: VisualizationStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
 
   #assignedContainer: Element | null = null;
-
-  #defaultStrategy: VisualizationStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
 
   constructor(
     private readonly elementRef: ElementRef<Element>,
@@ -26,11 +28,6 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // TODO: should be checked in OnChanges-Lifecycle
-    if (!this.keyBinding) {
-      throw 'No KeyBinding provided';
-    }
-
     this.#assignedContainer = this.elementRef.nativeElement.closest(
       KEY_BINDINGS_CONTAINER_SELECTOR
     );
@@ -38,11 +35,9 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
     this.#assignedContainer?.dispatchEvent(
       new CustomEvent<KeyBinding>(ADD_KEY_EVENT_NAME, {
         detail: {
-          ...this.keyBinding,
+          ...this.shortcut,
           element: this.elementRef.nativeElement,
-          strategy:
-            this.keyBinding.strategy ??
-            this.#defaultStrategy,
+          strategy: this.strategy,
         },
       })
     );
@@ -52,11 +47,9 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
     this.#assignedContainer?.dispatchEvent(
       new CustomEvent<KeyBinding>(REMOVE_KEY_EVENT_NAME, {
         detail: {
-          ...this.keyBinding,
+          ...this.shortcut,
           element: this.elementRef.nativeElement,
-          strategy:
-            this.keyBinding.strategy ??
-            this.#defaultStrategy,
+          strategy: this.strategy,
         },
       })
     );

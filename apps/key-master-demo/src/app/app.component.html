@@ -13,18 +13,20 @@
   <hr/>
 
   <div kmKeysContainer name="Empty Container" [strategy]="strategyOptions.exclusive()">
-    <button>What about empty exclusive Containers O.o</button>
+    <div kmKeysContainer [strategy]="strategyOptions.bubble()">
+      <button>What about empty exclusive Containers O.o</button>
+    </div>
   </div>
 
   <div class="border border-red-500" kmKeysContainer>
-    <div kmKeyBinding [keyBinding]="dummyKeyBinding('b')">
+    <div [kmKeyBinding]="dummyKeyBinding('b')">
       <button>New Area</button>
       <div class="border border-amber-500" kmKeysContainer name="Nested Area" [strategy]="strategyOptions.bubble()">
         <button>Nested Area</button>
-        <div kmKeyBinding [keyBinding]="dummyKeyBinding('a')">
+        <div [kmKeyBinding]="dummyKeyBinding('a')">
           <div>
             <div>
-              <button kmKeyBinding [keyBinding]="dummyKeyBinding('c')">B-KeyBinding-Button</button>
+              <button [kmKeyBinding]="dummyKeyBinding('c')">B-KeyBinding-Button</button>
             </div>
           </div>
         </div>
@@ -36,10 +38,10 @@
     Bereich A
 
     <div>
-      <button kmKeyBinding [keyBinding]="dummyKeyBinding('a')">FOO</button>
+      <button [kmKeyBinding]="dummyKeyBinding('a')">FOO</button>
     </div>
 
-    <div kmKeyBinding [keyBinding]="dummyKeyBinding('b')">
+    <div [kmKeyBinding]="dummyKeyBinding('b')">
       Bereich A-Nested (belongs to Container A, but has additional key-bindings)
       <input type="text" value="FOO_BAR" />
     </div>
@@ -55,8 +57,8 @@
 
     <ul>
       <!-- attr tabindex necessary to make div focusable -->
-      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [keyBinding]="dummyKeyBinding(i)">ListenElement #{{i}}</li>
-      <li (click)="onListElementClick('6')" tabindex="0" kmKeyBinding [keyBinding]="dummyKeyBinding('6', this.visualizationStrategyOptions.noop())">ListenElement #6 (my VisualizationStrategy is Noop)</li>
+      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" [kmKeyBinding]="dummyKeyBinding(i)">ListenElement #{{i}}</li>
+      <li (click)="onListElementClick('6')" tabindex="0" [kmKeyBinding]="dummyKeyBinding('6')" [strategy]="visualizationStrategyOptions.noop()">ListenElement #6 (my VisualizationStrategy is Noop)</li>
     </ul>
   </div>
 
