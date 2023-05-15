@@ -33,4 +33,8 @@ export class OverlayComponent {
 
   constructor(public readonly overlayService: VisualizationService) {
   }
+
+  isEmpty(groups: Map<string, KeyBinding[]>) {
+    return Array.from(groups.values()).flat().length === 0
+  }
 }

@@ -5,14 +5,14 @@ import {KeyMasterService} from '../key-master.service';
 import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';
 import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
 import {VisualizationStrategy} from './visualization-strategies';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {KeyBinding} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class VisualizationService {
   strategyRefs: Set<VisualizationStrategy> = new Set();
 
-  activeKeyBindings$ = this.keyMasterService.getActiveKeyBindings().pipe(
+  activeKeyBindings$: Observable<Map<string, KeyBinding[]>> = this.keyMasterService.getActiveKeyBindings().pipe(
     startWith(new Map<string, KeyBinding[]>()),
     pairwise(),
     shareReplay(1),

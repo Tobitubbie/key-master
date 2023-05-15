@@ -1,41 +1,44 @@
 <!-- Overlay-Container -->
-<div
-  *ngIf="overlayService.isOpen"
-  @zoom
-  class="flex gap-8 shadow-lg bg-neutral-800/80 p-4 rounded-xl backdrop-blur-md text-neutral-300"
->
-  <ng-container
-    *ngFor="
-      let group of overlayService.activeKeyBindings$
-        | async
-        | keyvalue : groupsSort;
-      trackBy: trackByGroup
-    "
-  >
-    <!-- Action/KeyBinding Group -->
-    <div
-      *ngIf="group.value.length > 0"
-      class="flex flex-col min-w-[250px] whitespace-nowrap text-ellipsis overflow-hidden"
-    >
-      <!-- Group-Name -->
-      <p @fade class="font-bold text-xl mb-1">{{ group.key }}</p>
+<div *ngIf="overlayService.isOpen"
+     @zoom
+     class="flex gap-8 shadow-lg bg-neutral-800/80 p-4 rounded-xl backdrop-blur-md text-neutral-300">
 
-      <!-- KeyBindings List -->
-      <ul class="divide-y rounded-full divide-neutral-500">
-        <li
-          *ngFor="let keyBinding of group.value; trackBy: trackByElement"
-          @fade
-          class="flex justify-between items-center gap-3 px-1 py-3 font-light"
-        >
-          <span class="text-ellipsis overflow-hidden whitespace-nowrap">{{
-            keyBinding.label
-          }}</span>
-          <span
-            class="whitespace-nowrap bg-neutral-500 text-neutral-200 rounded px-2 py-1"
-            >{{ keyBinding.key }}</span
-          >
-        </li>
-      </ul>
-    </div>
+  <ng-container *ngIf="overlayService.activeKeyBindings$ | async as groups">
+
+    <ng-container *ngFor="let group of groups | keyvalue : groupsSort ; trackBy: trackByGroup">
+
+      <!-- Action/KeyBinding Group -->
+      <div *ngIf="group.value.length > 0"
+           class="flex flex-col min-w-[250px] whitespace-nowrap text-ellipsis overflow-hidden">
+
+        <!-- Group-Name -->
+        <p @fade class="font-bold text-xl mb-1">{{ group.key }}</p>
+
+        <!-- KeyBindings List -->
+        <ul class="divide-y rounded-full divide-neutral-500">
+          <li *ngFor="let keyBinding of group.value; trackBy: trackByElement"
+              @fade
+              class="flex justify-between items-center gap-3 px-1 py-3 font-light">
+
+            <span class="text-ellipsis overflow-hidden whitespace-nowrap">
+              {{ keyBinding.label }}
+            </span>
+
+            <span class="whitespace-nowrap bg-neutral-500 text-neutral-200 rounded px-2 py-1">
+              {{ keyBinding.key }}
+            </span>
+
+          </li>
+        </ul>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isEmpty(groups)">
+      <p class="font-light italic">No key-bindings</p>
+    </ng-container>
+
   </ng-container>
+
 </div>
