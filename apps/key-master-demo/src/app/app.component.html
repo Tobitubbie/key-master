@@ -18,6 +18,10 @@
     </div>
   </div>
 
+  <div>
+    <button [kmKeyBinding]="dummyKeyBinding('x')">KeyBinding outside any Container</button>
+  </div>
+
   <div class="border border-red-500" kmKeysContainer>
     <div [kmKeyBinding]="dummyKeyBinding('b')">
       <button>New Area</button>

@@ -32,6 +32,10 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
       KEY_BINDINGS_CONTAINER_SELECTOR
     );
 
+    if (!this.#assignedContainer) {
+      throw 'KeyBindingDirective must be used inside a KeyBindingsContainerDirective';
+    }
+
     this.#assignedContainer?.dispatchEvent(
       new CustomEvent<KeyBinding>(ADD_KEY_EVENT_NAME, {
         detail: {
