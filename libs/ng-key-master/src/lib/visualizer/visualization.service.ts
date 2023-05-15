@@ -12,34 +12,20 @@ import {KeyBinding} from '../models';
 export class VisualizationService {
   strategyRefs: Set<VisualizationStrategy> = new Set();
 
-  activeKeyBindings$: Observable<Map<string, KeyBinding[]>> = this.keyMasterService.getActiveKeyBindings().pipe(
+  activeKeyBindings$: Observable<Map<string, KeyBinding[]>> = this.keyMasterService.getActiveContainers().pipe(
+    map((containers) => {
+      const groups = new Map<string, KeyBinding[]>();
+      containers.map((container) => {
+        groups.set(container.name ?? 'others', [
+          ...container.keyBindings.values(),
+        ]);
+      });
+      return groups;
+    }),
     startWith(new Map<string, KeyBinding[]>()),
     pairwise(),
     shareReplay(1),
-    tap(([prev, cur]) => {
-      const prevAr = Array.from<KeyBinding[]>(prev.values()).flat();
-      const curAr = Array.from<KeyBinding[]>(cur.values()).flat();
-
-      // adds missing keyBindings
-      const toAdd = curAr.filter((kb) => !prevAr.includes(kb));
-      toAdd.forEach((kb) => {
-        const strategy = kb.strategy;
-        if (strategy) {
-          strategy.create(kb);
-          this.strategyRefs.add(strategy);
-        }
-      });
-
-      // removes obsolete keyBindings
-      const toRemove = prevAr.filter((kb) => !curAr.includes(kb));
-      toRemove.forEach((kb) => {
-        const strategy = kb.strategy;
-        if (strategy) {
-          strategy.destroy();
-          this.strategyRefs.delete(strategy);
-        }
-      });
-    }),
+    tap(([prev, cur]) => this.#updateStrategyRefs(prev, cur)),
     map(([, activeKeyBindingMap]) => activeKeyBindingMap)
   );
 
@@ -47,6 +33,7 @@ export class VisualizationService {
   get isOpen() {
     return this.#isOpen.value;
   }
+
   isOpen$ = this.#isOpen.asObservable();
 
   #globalPortal = new ComponentPortal(OverlayComponent);
@@ -84,5 +71,32 @@ export class VisualizationService {
 
   toggleOverlay(): void {
     this.isOpen ? this.hideOverlay() : this.showOverlay();
+  }
+
+  #updateStrategyRefs(previousMap: Map<string, KeyBinding[]>, currentMap: Map<string, KeyBinding[]>): void {
+    const previousKeyBindings = Array.from<KeyBinding[]>(previousMap.values()).flat();
+    const currentKeyBindings = Array.from<KeyBinding[]>(currentMap.values()).flat();
+
+    // adds missing keyBindings
+    currentKeyBindings
+      .filter((kb) => !previousKeyBindings.includes(kb))
+      .forEach((kb) => {
+        const strategy = kb.strategy;
+        if (strategy) {
+          strategy.create(kb);
+          this.strategyRefs.add(strategy);
+        }
+      });
+
+    // removes obsolete keyBindings
+    previousKeyBindings
+      .filter((kb) => !currentKeyBindings.includes(kb))
+      .forEach((kb) => {
+        const strategy = kb.strategy;
+        if (strategy) {
+          strategy.destroy();
+          this.strategyRefs.delete(strategy);
+        }
+      });
   }
 }

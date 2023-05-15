@@ -2,7 +2,6 @@ import {inject, Inject, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
 import {ACTIVE_ELEMENT, ActiveElement} from './active-element.token';
-import {KeyBinding} from './models';
 import {DOCUMENT} from '@angular/common';
 import {Container} from './container';
 import {KEY_BINDINGS_CONTAINER_SELECTOR} from './key-bindings-container.directive';
@@ -44,9 +43,7 @@ export class KeyMasterService {
     );
   }
 
-  getParentContainerFromElement(
-    element: Element | null | undefined
-  ): Container | undefined {
+  getParentContainerFromElement(element: Element | null | undefined): Container | undefined {
     // parentElement used because "closest" return element itself if it matches selector
     const closestContainerElement = element?.parentElement?.closest(
       KEY_BINDINGS_CONTAINER_SELECTOR
@@ -61,19 +58,5 @@ export class KeyMasterService {
     }
 
     return undefined;
-  }
-
-  getActiveKeyBindings(): Observable<Map<string, KeyBinding[]>> {
-    return this.getActiveContainers().pipe(
-      map((containers) => {
-        const groups = new Map<string, KeyBinding[]>();
-        containers.map((container) => {
-          groups.set(container.name ?? 'others', [
-            ...container.keyBindings.values(),
-          ]);
-        });
-        return groups;
-      })
-    );
   }
 }
