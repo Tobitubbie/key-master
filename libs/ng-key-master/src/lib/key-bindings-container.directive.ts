@@ -1,12 +1,10 @@
 import {Directive, ElementRef, HostListener, inject, Input, OnDestroy, OnInit,} from '@angular/core';
 import {Container} from './container';
-import {IgnoreTarget, KeyBinding} from './models';
+import {IgnoreTarget} from './models';
 import {KeyMasterService} from './key-master.service';
 import {Strategy, StrategyOptions} from './strategies';
 import {DEFAULT_CONTAINER_STRATEGY, DEFAULT_IGNORE_TARGETS} from "./tokens";
 
-export const ADD_KEY_EVENT_NAME = 'removeKey';
-export const REMOVE_KEY_EVENT_NAME = 'addKey';
 
 export const KEY_BINDINGS_CONTAINER_SELECTOR = '[kmKeysContainer]';
 
@@ -14,10 +12,8 @@ export const KEY_BINDINGS_CONTAINER_SELECTOR = '[kmKeysContainer]';
   selector: '[kmKeysContainer]', // update KEY_BINDINGS_CONTAINER_SELECTOR on change
   standalone: true,
 })
-export class KeyBindingsContainerDirective
-  extends Container
-  implements OnInit, OnDestroy
-{
+export class KeyBindingsContainerDirective extends Container implements OnInit, OnDestroy {
+
   @Input()
   override ignoreTargets: IgnoreTarget[] = inject(DEFAULT_IGNORE_TARGETS);
 
@@ -45,16 +41,6 @@ export class KeyBindingsContainerDirective
     if (this.registrationId) {
       this.service.deregisterContainer(this.registrationId);
     }
-  }
-
-  @HostListener(ADD_KEY_EVENT_NAME, ['$event'])
-  onAddKey(event: CustomEvent<KeyBinding>) {
-    super.addKeyBinding(event.detail);
-  }
-
-  @HostListener(REMOVE_KEY_EVENT_NAME, ['$event'])
-  onRemoveKey(event: CustomEvent<KeyBinding>) {
-    super.removeKeyBinding(event.detail);
   }
 
   @HostListener('keydown', ['$event'])

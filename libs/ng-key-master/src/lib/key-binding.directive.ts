@@ -1,12 +1,9 @@
 import {AfterViewInit, Directive, ElementRef, inject, Input, OnDestroy,} from '@angular/core';
-import {KeyBinding, Shortcut} from './models';
-import {
-  ADD_KEY_EVENT_NAME,
-  KEY_BINDINGS_CONTAINER_SELECTOR,
-  REMOVE_KEY_EVENT_NAME,
-} from './key-bindings-container.directive';
+import {Shortcut} from './models';
 import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
 import {VisualizationStrategy} from "./visualizer/visualization-strategies";
+import {KeyMasterService} from "./key-master.service";
+import {Container} from "./container";
 
 @Directive({
   selector: '[kmKeyBinding]',
@@ -20,42 +17,33 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
   @Input()
   strategy: VisualizationStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
 
-  #assignedContainer: Element | null = null;
+  #assignedContainer: Container | undefined;
 
   constructor(
     private readonly elementRef: ElementRef<Element>,
+    private readonly keyMasterService: KeyMasterService,
   ) {
   }
 
   ngAfterViewInit() {
-    this.#assignedContainer = this.elementRef.nativeElement.closest(
-      KEY_BINDINGS_CONTAINER_SELECTOR
-    );
+    this.#assignedContainer = this.keyMasterService.getParentContainerFromElement(this.elementRef.nativeElement);
 
     if (!this.#assignedContainer) {
       throw 'KeyBindingDirective must be used inside a KeyBindingsContainerDirective';
     }
 
-    this.#assignedContainer?.dispatchEvent(
-      new CustomEvent<KeyBinding>(ADD_KEY_EVENT_NAME, {
-        detail: {
-          ...this.shortcut,
-          element: this.elementRef.nativeElement,
-          strategy: this.strategy,
-        },
-      })
-    );
+    this.#assignedContainer?.addKeyBinding({
+      ...this.shortcut,
+      element: this.elementRef.nativeElement,
+      strategy: this.strategy,
+    });
   }
 
   ngOnDestroy() {
-    this.#assignedContainer?.dispatchEvent(
-      new CustomEvent<KeyBinding>(REMOVE_KEY_EVENT_NAME, {
-        detail: {
-          ...this.shortcut,
-          element: this.elementRef.nativeElement,
-          strategy: this.strategy,
-        },
-      })
-    );
+    this.#assignedContainer?.removeKeyBinding({
+      ...this.shortcut,
+      element: this.elementRef.nativeElement,
+      strategy: this.strategy,
+    });
   }
 }
