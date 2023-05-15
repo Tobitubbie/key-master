@@ -34,13 +34,11 @@ export class KeyBindingsContainerDirective extends Container implements OnInit, 
   }
 
   ngOnInit() {
-    this.registrationId = this.service.registerContainer(this);
+    this.service.registerContainer(this);
   }
 
   ngOnDestroy() {
-    if (this.registrationId) {
-      this.service.deregisterContainer(this.registrationId);
-    }
+    this.service.deregisterContainer(this);
   }
 
   @HostListener('keydown', ['$event'])

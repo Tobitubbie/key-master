@@ -9,30 +9,19 @@ export abstract class Container {
   strategy: Strategy = new NoopStrategy();
 
   name: string | undefined;
-  registrationId: string | undefined;
   element: Element | undefined;
 
   addKeyBinding(keyBinding: KeyBinding): void {
-    console.log(
-      `[CONTAINER] ${this.registrationId ?? this.name}: Adding KeyBinding ${
-        keyBinding.label
-      }`
-    );
+    console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Adding KeyBinding ${keyBinding.label}`);
     if (this.keyBindings.has(keyBinding.key)) {
-      throw `[CONTAINER] ${this.registrationId ?? 'global'}: Binding for Key ${
-        keyBinding.key
-      } already exists`;
+      throw `[CONTAINER] ${this.name ?? 'unnamed'}: Binding for Key ${keyBinding.key} already exists`;
     } else {
       this.keyBindings.set(keyBinding.key, keyBinding);
     }
   }
 
   removeKeyBinding(keyBinding: KeyBinding): void {
-    console.log(
-      `[CONTAINER] ${this.registrationId ?? 'global'}: Removing KeyBinding ${
-        keyBinding.label
-      }`
-    );
+    console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Removing KeyBinding ${keyBinding.label}`);
     this.keyBindings.delete(keyBinding.key);
   }
 

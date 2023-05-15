@@ -14,7 +14,7 @@ import {GlobalContainer} from "./global-container";
 export class KeyMasterService {
   readonly globalContainer: Container = inject(GlobalContainer);
 
-  readonly #containers: Map<string, Container> = new Map();
+  readonly #containers = new Set<Container>();
 
   constructor(
     @Inject(ACTIVE_ELEMENT)
@@ -23,14 +23,12 @@ export class KeyMasterService {
   ) {
   }
 
-  registerContainer(container: Container): string {
-    const uuid = this.#containers.size.toString();
-    this.#containers.set(uuid, container);
-    return uuid;
+  registerContainer(container: Container): void {
+    this.#containers.add(container);
   }
 
-  deregisterContainer(uuid: string): void {
-    this.#containers.delete(uuid);
+  deregisterContainer(container: Container): void {
+    this.#containers.delete(container);
   }
 
   getActiveContainers(): Observable<Container[]> {
