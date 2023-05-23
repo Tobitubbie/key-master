@@ -25,13 +25,13 @@ export class TextareaComponent {
   italic = false;
 
   boldKeyBinding: KeyBinding = {
-    key: 'B',
+    key: 'ctrl+b',
     action: () => this.toggleBold(),
     label: 'Text Bold',
   };
 
   italicKeyBinding: KeyBinding = {
-    key: 'I',
+    key: 'ctrl+i',
     action: () => this.toggleItalic(),
     label: 'Text Italic',
   };

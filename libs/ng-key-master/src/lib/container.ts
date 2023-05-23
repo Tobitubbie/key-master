@@ -1,5 +1,6 @@
 import {IgnoreTarget, KeyBinding} from './models';
 import {NoopStrategy, Strategy} from './strategies';
+import {keycodeMatchesEvent} from "./keycode/keycode";
 
 export abstract class Container {
 
@@ -28,12 +29,17 @@ export abstract class Container {
   onKeyboardEvent(event: KeyboardEvent): void {
     let handled = false;
 
-    if (
-      !this.ignoreTargets.some(
-        (ignoreTarget) => event.target instanceof ignoreTarget
-      )
+    if (!this.ignoreTargets.some((ignoreTarget) =>
+      event.target instanceof ignoreTarget)
     ) {
-      const keyBinding = this.keyBindings.get(event.key);
+
+      let keyBinding: KeyBinding | undefined = undefined;
+      for (const key of this.keyBindings.keys()) {
+        if (keycodeMatchesEvent(key, event)) {
+          keyBinding = this.keyBindings.get(key);
+          break;
+        }
+      }
 
       if (keyBinding) {
         keyBinding.action();
