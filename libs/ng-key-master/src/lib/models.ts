@@ -1,10 +1,7 @@
 import {VisualizationStrategy} from './visualizer/visualization-strategies';
 
-// TODO: typify real keys
-export type Key = string;
-
 export type Shortcut = {
-  key: Key;
+  key: string;
   action: VoidFunction;
   label?: string;
 }

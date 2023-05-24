@@ -51,6 +51,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.globalKeyBindings.push(key);
   }
 
+  getDummyAction(key: string): void {
+    console.log(`${key} pressed!`);
+  }
+
   dummyKeyBinding(key: string): KeyBinding {
     return {
       key,

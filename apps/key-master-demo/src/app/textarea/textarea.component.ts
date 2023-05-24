@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {
-  KeyBinding,
   KeyBindingDirective,
   KeyBindingsContainerDirective,
   StrategyOptions,
@@ -24,24 +23,14 @@ export class TextareaComponent {
   bold = false;
   italic = false;
 
-  boldKeyBinding: KeyBinding = {
-    key: 'ctrl+b',
-    action: () => this.toggleBold(),
-    label: 'Text Bold',
-  };
+  toggleBold = () => this.bold = !this.bold;
 
-  italicKeyBinding: KeyBinding = {
-    key: 'ctrl+i',
-    action: () => this.toggleItalic(),
-    label: 'Text Italic',
-  };
-
-  toggleBold() {
-    this.bold = !this.bold;
-  }
-
-  toggleItalic() {
+  toggleItalic(x: string) {
     this.italic = !this.italic;
+    this.printSomething(x);
   }
 
+  printSomething(thing: string): void {
+    console.log(`Printing Something: ${thing}`, this.bold, this.italic);
+  }
 }

@@ -19,18 +19,18 @@
   </div>
 
   <div>
-    <button [kmKeyBinding]="dummyKeyBinding('x')">KeyBinding outside any Container</button>
+    <button kmKeyBinding key="x" (action)="getDummyAction('x')" label="DummyLabel_X">KeyBinding outside any Container</button>
   </div>
 
   <div class="border border-red-500" kmKeysContainer>
-    <div [kmKeyBinding]="dummyKeyBinding('b')">
+    <div kmKeyBinding key="b" (action)="getDummyAction('b')" label="DummyLabel_B">
       <button>New Area</button>
       <div class="border border-amber-500" kmKeysContainer name="Nested Area" [strategy]="strategyOptions.bubble()">
         <button>Nested Area</button>
-        <div [kmKeyBinding]="dummyKeyBinding('a')">
+        <div kmKeyBinding key="a" (action)="getDummyAction('a')" label="DummyLabel_A">
           <div>
             <div>
-              <button [kmKeyBinding]="dummyKeyBinding('c')">B-KeyBinding-Button</button>
+              <button kmKeyBinding key="c" (action)="getDummyAction('c')" label="DummyLabel_C">C-KeyBinding-Button</button>
             </div>
           </div>
         </div>
@@ -42,10 +42,10 @@
     Bereich A
 
     <div>
-      <button [kmKeyBinding]="dummyKeyBinding('a')">FOO</button>
+      <button kmKeyBinding key="shift+a" (action)="getDummyAction('shift+a')" label="DummyLabel_SHIFT+A">FOO</button>
     </div>
 
-    <div [kmKeyBinding]="dummyKeyBinding('b')">
+    <div kmKeyBinding key="ctrl+b" (action)="getDummyAction('ctrl+b')" label="DummyLabel_CTRL+B">
       Bereich A-Nested (belongs to Container A, but has additional key-bindings)
       <input type="text" value="FOO_BAR" />
     </div>
@@ -61,8 +61,8 @@
 
     <ul>
       <!-- attr tabindex necessary to make div focusable -->
-      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" [kmKeyBinding]="dummyKeyBinding(i)">ListenElement #{{i}}</li>
-      <li (click)="onListElementClick('6')" tabindex="0" [kmKeyBinding]="dummyKeyBinding('6')" [strategy]="visualizationStrategyOptions.noop()">ListenElement #6 (my VisualizationStrategy is Noop)</li>
+      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [key]="i" (action)="getDummyAction(i)" [label]="'DummyLabel_'+i">ListenElement #{{i}}</li>
+      <li (click)="onListElementClick('6')" tabindex="0" kmKeyBinding key="6" (action)="getDummyAction('6')" label="DummyLabel_6" [strategy]="visualizationStrategyOptions.noop()">ListenElement #6 (my VisualizationStrategy is Noop)</li>
     </ul>
   </div>
 

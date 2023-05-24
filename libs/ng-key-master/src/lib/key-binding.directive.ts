@@ -1,5 +1,4 @@
-import {AfterViewInit, Directive, ElementRef, inject, Input, OnDestroy,} from '@angular/core';
-import {Shortcut} from './models';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, inject, Input, OnDestroy, Output,} from '@angular/core';
 import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
 import {VisualizationStrategy} from "./visualizer/visualization-strategies";
 import {KeyMasterService} from "./key-master.service";
@@ -11,11 +10,17 @@ import {Container} from "./container";
 })
 export class KeyBindingDirective implements AfterViewInit, OnDestroy {
 
-  @Input({required: true, alias: 'kmKeyBinding'})
-  shortcut!: Shortcut;
+  @Input({required: true})
+  key!: string;
+
+  @Input()
+  label: string | undefined;
 
   @Input()
   strategy: VisualizationStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
+
+  @Output()
+  action = new EventEmitter<void>();
 
   #assignedContainer: Container | undefined;
 
@@ -33,7 +38,9 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
     }
 
     this.#assignedContainer?.addKeyBinding({
-      ...this.shortcut,
+      key: this.key,
+      action: () => this.action.emit(),
+      label: this.label,
       element: this.elementRef.nativeElement,
       strategy: this.strategy,
     });
@@ -41,7 +48,9 @@ export class KeyBindingDirective implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.#assignedContainer?.removeKeyBinding({
-      ...this.shortcut,
+      key: this.key,
+      action: () => this.action.emit(),
+      label: this.label,
       element: this.elementRef.nativeElement,
       strategy: this.strategy,
     });

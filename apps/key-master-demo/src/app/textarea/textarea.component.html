@@ -2,10 +2,11 @@
 <div class="border-2 border-gray-500 rounded w-96" kmKeysContainer name="Text-Editierung" [strategy]="strategyOptions.merge()" [ignoreTargets]="[]">
   <ul class="flex justify-end gap-6 px-4 py-1">
     <li>
-      <button class="p-2 bg-gray-200 rounded" [kmKeyBinding]="boldKeyBinding" [strategy]="visualizationStrategyOptions.overlay()" (click)="toggleBold()">Bold</button>
+      <button class="p-2 bg-gray-200 rounded" kmKeyBinding key="ctrl + b" (action)="toggleBold()" label="Text Bold" [strategy]="visualizationStrategyOptions.overlay()" (click)="toggleBold()">Bold</button>
     </li>
     <li>
-      <button class="p-2 bg-gray-200 rounded" [kmKeyBinding]="italicKeyBinding" [strategy]="visualizationStrategyOptions.inline()" (click)="toggleItalic()">Italic</button>
+<!--      <button class="p-2 bg-gray-200 rounded" kmKeyBinding key="ctrl + i" (action)="toggleItalic.bind(this,'lalelu')" label="Text Italic" [strategy]="visualizationStrategyOptions.inline()" (click)="toggleItalicFn('xxx')">Italic</button>-->
+      <button class="p-2 bg-gray-200 rounded" kmKeyBinding key="ctrl + i" (action)="toggleItalic('called by action')" label="Text Italic" [strategy]="visualizationStrategyOptions.inline()" (click)="toggleItalic('called by click')">Italic</button>
     </li>
   </ul>
 
