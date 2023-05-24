@@ -53,7 +53,6 @@ type Shortcut = {
     action: VoidFunction;
 }
 
-// type Key kommt von einer third-pary Library -> TODO: noch zu klären welche 
 ```
 
 subAt(controler-container) dient der registrierung beim controler-container für eine abstraktere steuerung (durch/von?) diensten (zB. die UI/Anzeige)
