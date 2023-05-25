@@ -4,6 +4,7 @@ export type Shortcut = {
   key: string;
   action: VoidFunction;
   label?: string;
+  multi?: boolean; // set true if the same Shortcut is assigned multiple times (e.g. used in ngFor)
 }
 
 export type KeyBinding = Shortcut & (

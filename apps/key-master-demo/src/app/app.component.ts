@@ -14,6 +14,7 @@ import {
 } from '@key-master/ng-key-master';
 import {TextareaComponent} from "./textarea/textarea.component";
 import {NgForOf} from "@angular/common";
+import {ListComponent} from "./list/list.component";
 
 @Component({
   standalone: true,
@@ -23,6 +24,7 @@ import {NgForOf} from "@angular/common";
     NgForOf,
     KeyBindingsContainerDirective,
     KeyBindingDirective,
+    ListComponent,
   ],
   selector: 'key-master-root',
   templateUrl: './app.component.html',
@@ -53,14 +55,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getDummyAction(key: string): void {
     console.log(`${key} pressed!`);
-  }
-
-  dummyKeyBinding(key: string): KeyBinding {
-    return {
-      key,
-      action: () => console.log(`${key} pressed!`),
-      label: `TestCommand_${key}`,
-    };
   }
 
   onListElementClick(index: string) {

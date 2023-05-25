@@ -4,7 +4,7 @@ import {keycodeMatchesEvent} from "./keycode/keycode";
 
 export abstract class Container {
 
-  readonly keyBindings: Map<string, KeyBinding> = new Map();
+  readonly keyBindings: KeyBinding[] = [];
 
   ignoreTargets: IgnoreTarget[] = [];
   strategy: Strategy = new NoopStrategy();
@@ -14,16 +14,19 @@ export abstract class Container {
 
   addKeyBinding(keyBinding: KeyBinding): void {
     console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Adding KeyBinding ${keyBinding.label}`);
-    if (this.keyBindings.has(keyBinding.key)) {
-      throw `[CONTAINER] ${this.name ?? 'unnamed'}: Binding for Key ${keyBinding.key} already exists`;
+    if (keyBinding.multi || !this.keyBindings.some(kb => kb.key === keyBinding.key)) {
+      this.keyBindings.push(keyBinding);
     } else {
-      this.keyBindings.set(keyBinding.key, keyBinding);
+      throw `[CONTAINER] ${this.name ?? 'unnamed'}: Binding for Key ${keyBinding.key} already exists`;
     }
   }
 
   removeKeyBinding(keyBinding: KeyBinding): void {
     console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Removing KeyBinding ${keyBinding.label}`);
-    this.keyBindings.delete(keyBinding.key);
+    const index = this.keyBindings.indexOf(keyBinding);
+    if (index > -1) {
+      this.keyBindings.splice(index, 1);
+    }
   }
 
   onKeyboardEvent(event: KeyboardEvent): void {
@@ -33,17 +36,13 @@ export abstract class Container {
       event.target instanceof ignoreTarget)
     ) {
 
-      let keyBinding: KeyBinding | undefined = undefined;
-      for (const key of this.keyBindings.keys()) {
-        if (keycodeMatchesEvent(key, event)) {
-          keyBinding = this.keyBindings.get(key);
-          break;
+      for (const keyBinding of this.keyBindings) {
+        if (keycodeMatchesEvent(keyBinding.key, event)
+          && (!keyBinding.multi || keyBinding.element?.contains(document.activeElement))) {
+            keyBinding.action();
+            handled = true;
+            break;
         }
-      }
-
-      if (keyBinding) {
-        keyBinding.action();
-        handled = true;
       }
     }
 

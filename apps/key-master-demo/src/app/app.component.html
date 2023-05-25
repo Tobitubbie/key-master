@@ -8,6 +8,10 @@
 
   <hr/>
 
+  <key-master-list></key-master-list>
+
+  <hr>
+
   <key-master-textarea></key-master-textarea>
 
   <hr/>
@@ -30,6 +34,7 @@
         <div kmKeyBinding key="a" (action)="getDummyAction('a')" label="DummyLabel_A">
           <div>
             <div>
+              <ng-container kmKeyBinding key="t" (action)="getDummyAction('t')" label="KeyBinding_on_NgContainer" [strategy]="visualizationStrategyOptions.noop()"></ng-container>
               <button kmKeyBinding key="c" (action)="getDummyAction('c')" label="DummyLabel_C">C-KeyBinding-Button</button>
             </div>
           </div>
@@ -61,8 +66,8 @@
 
     <ul>
       <!-- attr tabindex necessary to make div focusable -->
-      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [key]="i" (action)="getDummyAction(i)" [label]="'DummyLabel_'+i">ListenElement #{{i}}</li>
-      <li (click)="onListElementClick('6')" tabindex="0" kmKeyBinding key="6" (action)="getDummyAction('6')" label="DummyLabel_6" [strategy]="visualizationStrategyOptions.noop()">ListenElement #6 (my VisualizationStrategy is Noop)</li>
+      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [key]="i" (action)="onListElementClick(i)" [label]="'DummyLabel_'+i">ListenElement #{{i}}</li>
+      <li (click)="onListElementClick('6')" tabindex="0" kmKeyBinding key="6" (action)="onListElementClick('6')" label="DummyLabel_6" [strategy]="visualizationStrategyOptions.noop()">ListenElement #6 (my VisualizationStrategy is Noop)</li>
     </ul>
   </div>
 

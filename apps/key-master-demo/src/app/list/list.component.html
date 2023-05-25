@@ -1,0 +1,21 @@
+
+<h1 class="text-xl">Item-List</h1>
+
+<div class="m-3" kmKeysContainer name="Item-List" [ignoreTargets]="[]">
+
+  <input type="checkbox" id="allCheckbox" [checked]="isAllSelected()" (change)="toggleSelectAll()" kmKeyBinding key="a" (action)="toggleSelectAll()" label="Toggle All" />
+  <label for="allCheckbox">Toggle All</label>
+
+  <ul class="mt-3">
+    <li *ngFor="let item of items"
+        kmKeyBinding key="x" (action)="toggleSelection(item)" [multi]="true" label="Toggle current" [strategy]="visualizationStrategyOptions.noop()">
+
+      <input type="checkbox" [id]="'checkbox_'+item" [checked]="isSelected(item)" (change)="toggleSelection(item)">
+
+      <label [for]="'checkbox_'+item">{{item}}</label>
+    </li>
+  </ul>
+
+  <p>Select: {{getSelected()}}</p>
+
+</div>

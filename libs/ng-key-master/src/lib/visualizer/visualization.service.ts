@@ -7,21 +7,27 @@ import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
 import {VisualizationStrategy} from './visualization-strategies';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {KeyBinding} from '../models';
+import {Container} from "../container";
+
+
+function groupKeyBindingsByContainer(containers: Container[]): Map<string, KeyBinding[]> {
+  const groups = new Map<string, KeyBinding[]>();
+  containers.forEach((container) => groups.set(container.name ?? 'others', distinctByKey(container.keyBindings)));
+  return groups;
+}
+
+function distinctByKey(keyBindings: KeyBinding[]): KeyBinding[] {
+  return keyBindings.filter(keyBinding => {
+    return keyBindings.findIndex(kb => kb.key === keyBinding.key) === keyBindings.indexOf(keyBinding);
+  })
+}
 
 @Injectable({providedIn: 'root'})
 export class VisualizationService {
   strategyRefs: Set<VisualizationStrategy> = new Set();
 
   activeKeyBindings$: Observable<Map<string, KeyBinding[]>> = this.keyMasterService.getActiveContainers().pipe(
-    map((containers) => {
-      const groups = new Map<string, KeyBinding[]>();
-      containers.map((container) => {
-        groups.set(container.name ?? 'others', [
-          ...container.keyBindings.values(),
-        ]);
-      });
-      return groups;
-    }),
+    map(groupKeyBindingsByContainer),
     startWith(new Map<string, KeyBinding[]>()),
     pairwise(),
     shareReplay(1),
@@ -48,7 +54,7 @@ export class VisualizationService {
     private overlay: Overlay
   ) {
     // place global overlay over keybinding overlays (keybinding overlays added later -> by default they overlap global overlay)
-    // Attention: might cause bugs with mat-dialogs/-dropdowns or similar components -> needs to be tested
+    // Attention: might cause bugs with mat-dialogs/-dropdowns or similar components -> TODO: needs to be tested
     this.#globalOverlayHost.hostElement.classList.add('z-[1001]');
   }
 
