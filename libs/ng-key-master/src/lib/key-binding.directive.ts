@@ -1,4 +1,4 @@
-import {Directive, ElementRef, EventEmitter, inject, Input, OnDestroy, OnInit, Output,} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, inject, Input, OnDestroy, Output,} from '@angular/core';
 import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
 import {VisualizationStrategy} from "./visualizer/visualization-strategies";
 import {KeyMasterService} from "./key-master.service";
@@ -9,7 +9,7 @@ import {KeyBinding} from "./models";
   selector: '[kmKeyBinding]',
   standalone: true,
 })
-export class KeyBindingDirective implements OnInit, OnDestroy {
+export class KeyBindingDirective implements AfterViewInit, OnDestroy {
 
   @Input({required: true})
   key!: string;
@@ -36,7 +36,7 @@ export class KeyBindingDirective implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.#assignedContainer = this.keyMasterService.getParentContainerFromElement(this.elementRef.nativeElement);
 
     if (!this.#assignedContainer) {
