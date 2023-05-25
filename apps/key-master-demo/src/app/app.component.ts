@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const key: KeyBinding = {
-      key: 'F7', // Chrome's Keyboard-Navigation Shortcut
+      key: 'F2',
       label: 'Hilfe anzeigen/ausblenden',
       action: () => this.overlayService.toggleOverlay(),
     };
