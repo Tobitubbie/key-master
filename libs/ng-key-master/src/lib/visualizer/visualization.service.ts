@@ -24,15 +24,18 @@ function distinctByKey(keyBindings: KeyBinding[]): KeyBinding[] {
 
 @Injectable({providedIn: 'root'})
 export class VisualizationService {
-  strategyRefs: Set<VisualizationStrategy> = new Set();
+  strategyRefs = new Set<VisualizationStrategy>();
 
   activeKeyBindings$: Observable<Map<string, KeyBinding[]>> = this.keyMasterService.getActiveContainers().pipe(
-    map(groupKeyBindingsByContainer),
-    startWith(new Map<string, KeyBinding[]>()),
+    startWith<Container[]>([]),
     pairwise(),
     shareReplay(1),
-    tap(([prev, cur]) => this.#updateStrategyRefs(prev, cur)),
-    map(([, activeKeyBindingMap]) => activeKeyBindingMap)
+    tap(([prev, cur]) => {
+      const previousKeyBindings = prev.flatMap(container => container.keyBindings);
+      const currentKeyBindings = cur.flatMap(container => container.keyBindings);
+      this.#updateStrategyRefs(previousKeyBindings, currentKeyBindings)
+    }),
+    map(([, containers]) => groupKeyBindingsByContainer(containers)),
   );
 
   #isOpen = new BehaviorSubject(false);
@@ -79,9 +82,7 @@ export class VisualizationService {
     this.isOpen ? this.hideOverlay() : this.showOverlay();
   }
 
-  #updateStrategyRefs(previousMap: Map<string, KeyBinding[]>, currentMap: Map<string, KeyBinding[]>): void {
-    const previousKeyBindings = Array.from<KeyBinding[]>(previousMap.values()).flat();
-    const currentKeyBindings = Array.from<KeyBinding[]>(currentMap.values()).flat();
+  #updateStrategyRefs(previousKeyBindings: KeyBinding[], currentKeyBindings: KeyBinding[]): void {
 
     // adds missing keyBindings
     currentKeyBindings

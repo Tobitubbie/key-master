@@ -3,16 +3,30 @@
 
 <div class="m-3" kmKeysContainer name="Item-List" [ignoreTargets]="[]">
 
-  <input type="checkbox" id="allCheckbox" [checked]="isAllSelected()" (change)="toggleSelectAll()" kmKeyBinding key="a" (action)="toggleSelectAll()" label="Toggle All" />
+  <input type="checkbox" id="allCheckbox" [checked]="areAllSelected()" (change)="toggleAll()" kmKeyBinding key="a" (action)="toggleAll()" label="Toggle All" />
   <label for="allCheckbox">Toggle All</label>
 
-  <ul class="mt-3">
-    <li *ngFor="let item of items"
-        kmKeyBinding key="x" (action)="toggleSelection(item)" [multi]="true" label="Toggle current" [strategy]="visualizationStrategyOptions.noop()">
+  <p>Focused Item Index: {{focusedItemIndex}}</p>
 
-      <input type="checkbox" [id]="'checkbox_'+item" [checked]="isSelected(item)" (change)="toggleSelection(item)">
+  <ul class="mt-3"
+      [kmMultiKeyBindings]="[
+        {key: 'up', action: focusPreviousItem, label: 'Select Previous Item', multi: true},
+        {key: 'down', action: focusNextItem, label: 'Select Next Item', multi: true},
+      ]">
+
+    <li #itemElements
+        *ngFor="let item of items; let i = index"
+        (focusin)="setFocusedItemIndex(i)"
+        [kmMultiKeyBindings]="[
+          {key: 'x', action: toggleSelected.bind(this, item), label: 'Toggle Current Selection', multi: true, strategy: i === 0 ? visualizationStrategyOptions.overlay() : undefined},
+          {key: 'd', action: duplicateSelected.bind(this, item), label: 'Duplicate Current Selection', multi: true, strategy: i === 0 ? visualizationStrategyOptions.overlay() : undefined},
+        ]">
+
+      <input type="checkbox" [id]="'checkbox_'+item" [checked]="isSelected(item)" (change)="toggleSelected(item)">
+      <button>TEST</button>
 
       <label [for]="'checkbox_'+item">{{item}}</label>
+
     </li>
   </ul>
 

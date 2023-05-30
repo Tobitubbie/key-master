@@ -1,16 +1,12 @@
-import {EnvironmentProviders, inject, makeEnvironmentProviders} from "@angular/core";
-import {Strategy, StrategyOption, StrategyOptions} from "./strategies";
+import {EnvironmentProviders, makeEnvironmentProviders} from "@angular/core";
+import {StrategyOption, StrategyOptions} from "./strategies";
 import {
   DEFAULT_CONTAINER_STRATEGY,
   DEFAULT_IGNORE_TARGETS,
   DEFAULT_VISUALIZATION_STRATEGY,
   GLOBAL_CONTAINER_CONFIG
 } from "./tokens";
-import {
-  VisualizationStrategy,
-  VisualizationStrategyOption,
-  VisualizationStrategyOptions
-} from "./visualizer/visualization-strategies";
+import {VisualizationStrategyOption, VisualizationStrategyOptions} from "./visualizer/visualization-strategies";
 import {GlobalContainerConfig, IgnoreTarget} from "./models";
 
 
@@ -43,11 +39,13 @@ export function provideKeyMaster(userConfig: KeyMasterConfig = {}): EnvironmentP
   return makeEnvironmentProviders([
     {
       provide: DEFAULT_CONTAINER_STRATEGY,
-      useValue: () => createContainerStrategy(config.defaultContainerStrategy), // return fn instead of value to create a new instance foreach usage
+      deps: [StrategyOptions],
+      useFactory: (options: StrategyOptions) => options[config.defaultContainerStrategy],
     },
     {
       provide: DEFAULT_VISUALIZATION_STRATEGY,
-      useValue: () => createVisualizationStrategy(config.defaultVisualizationStrategy), // return fn instead of value to create a new instance foreach usage
+      deps: [VisualizationStrategyOptions],
+      useFactory: (options: VisualizationStrategyOptions) => options[config.defaultVisualizationStrategy],
     },
     {
       provide: DEFAULT_IGNORE_TARGETS,
@@ -58,15 +56,5 @@ export function provideKeyMaster(userConfig: KeyMasterConfig = {}): EnvironmentP
       useValue: config.globalContainerConfig,
     },
   ]);
-}
-
-function createContainerStrategy(option: StrategyOption): Strategy {
-  const strategyOptions = inject(StrategyOptions);
-  return strategyOptions[option]();
-}
-
-function createVisualizationStrategy(option: VisualizationStrategyOption): VisualizationStrategy {
-  const visualizationOptions = inject(VisualizationStrategyOptions);
-  return visualizationOptions[option]();
 }
 
