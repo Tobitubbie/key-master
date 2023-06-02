@@ -5,7 +5,6 @@ import {
   KeyBindingDirective,
   KeyBindingsContainerDirective,
   MultiKeyBindingsDirective,
-  StrategyOptions,
   VisualizationStrategyOptions
 } from "@key-master/ng-key-master";
 
@@ -27,8 +26,7 @@ export class ListComponent {
   focusedItemIndex = -1;
 
   constructor(
-    public readonly strategyOptions: StrategyOptions,
-    public readonly visualizationStrategyOptions: VisualizationStrategyOptions
+    public readonly visualizationStrategyOptions: VisualizationStrategyOptions,
   ) {
   }
 

@@ -21,7 +21,7 @@ export class MultiKeyBindingsDirective implements OnInit, OnDestroy {
     multi?: boolean
   }> = [];
 
-  #defaultStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY)();
+  #defaultStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY);
 
   #assignedContainer: Container | undefined;
 
@@ -46,7 +46,7 @@ export class MultiKeyBindingsDirective implements OnInit, OnDestroy {
         action,
         label,
         multi,
-        strategy: strategy ?? this.#defaultStrategy,
+        strategy: strategy ?? this.#defaultStrategy(),
         element: this.elementRef.nativeElement,
       });
     });
