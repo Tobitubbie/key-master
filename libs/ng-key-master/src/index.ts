@@ -6,7 +6,9 @@ export * from './lib/key-bindings-container.directive';
 export * from './lib/multi-key-bindings.directive';
 export * from './lib/key-binding.directive';
 export * from './lib/providers';
+export * from './lib/tokens';
 export * from './lib/container';
+export * from './lib/global-container';
 
 // Visualization
 
