@@ -18,7 +18,7 @@ export interface KeyMasterConfig {
 }
 
 export const defaultConfig: Required<KeyMasterConfig> = {
-  defaultContainerStrategy: 'bubble',
+  defaultContainerStrategy: 'merge',
   defaultVisualizationStrategy: 'overlay',
   defaultIgnoreTargets: [HTMLInputElement, HTMLTextAreaElement],
   globalContainerConfig: {
@@ -32,8 +32,13 @@ export const defaultConfig: Required<KeyMasterConfig> = {
 export function provideKeyMaster(userConfig: KeyMasterConfig = {}): EnvironmentProviders {
 
   const config: Required<KeyMasterConfig> = {
-    ...defaultConfig, ...userConfig,
-    globalContainerConfig: {...defaultConfig.globalContainerConfig, ...userConfig.globalContainerConfig}
+    ...defaultConfig,
+    ...userConfig,
+
+    globalContainerConfig: {
+      ...defaultConfig.globalContainerConfig,
+      ...userConfig.globalContainerConfig
+    }
   };
 
   return makeEnvironmentProviders([
@@ -57,4 +62,3 @@ export function provideKeyMaster(userConfig: KeyMasterConfig = {}): EnvironmentP
     },
   ]);
 }
-
