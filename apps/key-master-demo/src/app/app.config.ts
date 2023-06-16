@@ -15,5 +15,22 @@ export const appConfig: ApplicationConfig = {
         name: 'GlobalOverride',
       }
     }),
+
+    // for advanced configuration / overrides this is the way to go:
+    //
+    // {
+    //   provide: GlobalContainer,
+    //   useClass: GlobalContainerOverride,
+    // },
+    // {
+    //   provide: DEFAULT_CONTAINER_STRATEGY,
+    //   deps: [StrategyOptions],
+    //   useFactory: (options: StrategyOptions) => options.exclusive,
+    // },
+    // {
+    //   provide: DEFAULT_VISUALIZATION_STRATEGY,
+    //   deps: [VisualizationStrategyOptions],
+    //   useFactory: (options: VisualizationStrategyOptions) => options.noop,
+    // }
   ],
 };
