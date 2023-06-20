@@ -1,10 +1,12 @@
 import {IgnoreTarget, KeyBinding} from './models';
 import {NoopStrategy, Strategy} from './strategies';
 import {keycodeMatchesEvent} from "./keycode/keycode";
+import {signal} from "@angular/core";
 
 export abstract class Container {
 
-  readonly keyBindings: KeyBinding[] = [];
+  #keyBindings = signal<KeyBinding[]>([]);
+  readonly keyBindings = this.#keyBindings.asReadonly();
 
   ignoreTargets: IgnoreTarget[] = [];
   strategy: Strategy = new NoopStrategy();
@@ -14,8 +16,8 @@ export abstract class Container {
 
   addKeyBinding(keyBinding: KeyBinding): void {
     console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Adding KeyBinding ${keyBinding.label}`);
-    if (keyBinding.multi || !this.keyBindings.some(kb => kb.key === keyBinding.key)) {
-      this.keyBindings.push(keyBinding);
+    if (keyBinding.multi || !this.#keyBindings().some(kb => kb.key === keyBinding.key)) {
+      this.#keyBindings.mutate(keyBindings => keyBindings.push(keyBinding));
     } else {
       throw `[CONTAINER] ${this.name ?? 'unnamed'}: Binding for Key ${keyBinding.key} already exists`;
     }
@@ -23,10 +25,12 @@ export abstract class Container {
 
   removeKeyBinding(keyBinding: KeyBinding): void {
     console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Removing KeyBinding ${keyBinding.label}`);
-    const index = this.keyBindings.indexOf(keyBinding);
-    if (index > -1) {
-      this.keyBindings.splice(index, 1);
-    }
+    this.#keyBindings.mutate((keyBindings) => {
+      const index = keyBindings.indexOf(keyBinding);
+      if (index > -1) {
+        keyBindings.splice(index, 1);
+      }
+    })
   }
 
   onKeyboardEvent(event: KeyboardEvent): void {
@@ -36,7 +40,7 @@ export abstract class Container {
       event.target instanceof ignoreTarget)
     ) {
 
-      for (const keyBinding of this.keyBindings) {
+      for (const keyBinding of this.#keyBindings()) {
         if (keycodeMatchesEvent(keyBinding.key, event)
           && (!keyBinding.multi || keyBinding.element?.contains(document.activeElement))) {
             keyBinding.action();

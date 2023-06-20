@@ -1,0 +1,9 @@
+<div kmKeysContainer name="Dynamic Content">
+
+  <button (click)="showContent = !showContent">Toggle Content</button>
+
+  <div *ngIf="showContent">
+    <p kmKeyBinding key="shift + D" (action)="run()" label="Dynamic Action" tabindex="0">Some content</p>
+  </div>
+
+</div>

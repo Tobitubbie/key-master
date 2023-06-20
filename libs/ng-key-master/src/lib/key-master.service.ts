@@ -1,46 +1,37 @@
-import {inject, Inject, Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
-import {ACTIVE_ELEMENT, ActiveElement} from './active-element.token';
-import {DOCUMENT} from '@angular/common';
+import {computed, inject, Injectable, Signal, signal} from '@angular/core';
 import {Container} from './container';
 import {KEY_BINDINGS_CONTAINER_SELECTOR} from './key-bindings-container.directive';
 import {GlobalContainer} from "./global-container";
+import {ACTIVE_ELEMENT} from "./tokens";
+import {ActiveElement} from "./models";
 
 @Injectable({
   providedIn: 'root',
 })
 export class KeyMasterService {
+
+  #activeElement: Signal<ActiveElement> = inject(ACTIVE_ELEMENT);
+
+  #containers = signal<Set<Container>>(new Set());
+  readonly containers = this.#containers.asReadonly();
+
+  #closestContainer = computed(() => this.getParentContainerFromElement(this.#activeElement()) ?? this.globalContainer,
+    {equal: (prev, cur) => prev === cur});
+
+  activeContainers = computed(() => {
+    const activeContainers = this.#closestContainer().discoverParentContainers();
+    activeContainers.forEach(c => c.keyBindings()); // workaround to detect changes of keybindings
+    return activeContainers;
+  });
+
   readonly globalContainer: Container = inject(GlobalContainer);
 
-  readonly #containers = new Set<Container>();
-
-  constructor(
-    @Inject(ACTIVE_ELEMENT)
-    private readonly activeElement$: Observable<ActiveElement>,
-    @Inject(DOCUMENT) private readonly document: Document
-  ) {
-  }
-
   registerContainer(container: Container): void {
-    this.#containers.add(container);
+    this.#containers.mutate((containers) => containers.add(container));
   }
 
   deregisterContainer(container: Container): void {
-    this.#containers.delete(container);
-  }
-
-  getActiveContainers(): Observable<Container[]> {
-    return this.activeElement$.pipe(
-      map(
-        (activeElement) =>
-          this.getParentContainerFromElement(activeElement) ??
-          this.globalContainer
-      ),
-      distinctUntilChanged(),
-      map((container) => container.discoverParentContainers()),
-      shareReplay(1)
-    );
+    this.#containers.mutate((containers) => containers.delete(container));
   }
 
   getParentContainerFromElement(element: Element | null | undefined): Container | undefined {
@@ -50,7 +41,7 @@ export class KeyMasterService {
     );
 
     if (closestContainerElement) {
-      for (const container of this.#containers.values()) {
+      for (const container of this.#containers()) {
         if (container.element === closestContainerElement) {
           return container;
         }
