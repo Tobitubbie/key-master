@@ -65,7 +65,6 @@ export class NoopVisualizationStrategy implements VisualizationStrategy {
 
 /**
  * Textual representation of the key that gets added as a child of the host element.
- * Useful for
  */
 export class InlineVisualizationStrategy implements VisualizationStrategy {
   element: HTMLSpanElement = this.renderer.createElement('span');
@@ -149,7 +148,7 @@ export class OverlayVisualizationStrategy implements VisualizationStrategy {
       providers: [{ provide: KEY_BINDING_OVERLAY_DATA, useValue: keyBinding }],
     });
 
-    if (this.visualizationService.isOpen) {
+    if (this.visualizationService.isOpen()) {
       this.show();
     }
   }

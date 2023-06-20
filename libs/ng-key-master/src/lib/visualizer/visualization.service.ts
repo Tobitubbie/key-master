@@ -1,18 +1,16 @@
-import {Injectable} from '@angular/core';
+import {computed, effect, Injectable, signal} from '@angular/core';
 import {OverlayComponent} from './overlay.component';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {KeyMasterService} from '../key-master.service';
 import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';
-import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
 import {VisualizationStrategy} from './visualization-strategies';
-import {BehaviorSubject, Observable} from 'rxjs';
 import {KeyBinding} from '../models';
 import {Container} from "../container";
 
 
 function groupKeyBindingsByContainer(containers: Container[]): Map<string, KeyBinding[]> {
   const groups = new Map<string, KeyBinding[]>();
-  containers.forEach((container) => groups.set(container.name ?? 'others', distinctByKey(container.keyBindings)));
+  containers.forEach((container) => groups.set(container.name ?? 'others', distinctByKey(container.keyBindings())));
   return groups;
 }
 
@@ -26,24 +24,10 @@ function distinctByKey(keyBindings: KeyBinding[]): KeyBinding[] {
 export class VisualizationService {
   strategyRefs = new Set<VisualizationStrategy>();
 
-  activeKeyBindings$: Observable<Map<string, KeyBinding[]>> = this.keyMasterService.getActiveContainers().pipe(
-    startWith<Container[]>([]),
-    pairwise(),
-    shareReplay(1),
-    tap(([prev, cur]) => {
-      const previousKeyBindings = prev.flatMap(container => container.keyBindings);
-      const currentKeyBindings = cur.flatMap(container => container.keyBindings);
-      this.#updateStrategyRefs(previousKeyBindings, currentKeyBindings)
-    }),
-    map(([, containers]) => groupKeyBindingsByContainer(containers)),
-  );
+  activeKeyBindings = computed(() => groupKeyBindingsByContainer(this.keyMasterService.activeContainers()));
 
-  #isOpen = new BehaviorSubject(false);
-  get isOpen() {
-    return this.#isOpen.value;
-  }
-
-  isOpen$ = this.#isOpen.asObservable();
+  #isOpen = signal<boolean>(false);
+  isOpen = this.#isOpen.asReadonly();
 
   #globalPortal = new ComponentPortal(OverlayComponent);
   #globalOverlayHost = this.overlay.create({
@@ -57,53 +41,45 @@ export class VisualizationService {
     private overlay: Overlay
   ) {
     // place global overlay over keybinding overlays (keybinding overlays added later -> by default they overlap global overlay)
-    // Attention: might cause bugs with mat-dialogs/-dropdowns or similar components -> TODO: needs to be tested
+    // Attention: might cause bugs with mat-dialogs/-dropdowns or any element with higher z-index -> TODO: needs to be tested
     this.#globalOverlayHost.hostElement.classList.add('z-[1001]');
+
+    // on active-containers change: handles creation/destruction of all visualizations
+    effect(() => {
+      this.strategyRefs.forEach(s => s.destroy());
+      this.strategyRefs.clear();
+
+      this.keyMasterService.activeContainers()
+        .flatMap(c => c.keyBindings())
+        .forEach(kb => {
+          const strategy = kb.strategy;
+          if (strategy) {
+            this.strategyRefs.add(strategy);
+            strategy.create(kb);
+            this.#isOpen() ? strategy.show() : strategy.hide();
+          }
+        });
+    });
   }
 
   showOverlay(): void {
-    if (!this.isOpen) {
+    if (!this.#isOpen()) {
       if (!this.#globalPortal.isAttached) {
         this.#globalPortal.attach(this.#globalOverlayHost);
       }
       this.strategyRefs.forEach((strategy) => strategy.show());
     }
-    this.#isOpen.next(true);
+    this.#isOpen.set(true);
   }
 
   hideOverlay(): void {
-    if (this.isOpen) {
+    if (this.#isOpen()) {
       this.strategyRefs.forEach((strategy) => strategy.hide());
     }
-    this.#isOpen.next(false);
+    this.#isOpen.set(false);
   }
 
   toggleOverlay(): void {
-    this.isOpen ? this.hideOverlay() : this.showOverlay();
-  }
-
-  #updateStrategyRefs(previousKeyBindings: KeyBinding[], currentKeyBindings: KeyBinding[]): void {
-
-    // adds missing keyBindings
-    currentKeyBindings
-      .filter((kb) => !previousKeyBindings.includes(kb))
-      .forEach((kb) => {
-        const strategy = kb.strategy;
-        if (strategy) {
-          strategy.create(kb);
-          this.strategyRefs.add(strategy);
-        }
-      });
-
-    // removes obsolete keyBindings
-    previousKeyBindings
-      .filter((kb) => !currentKeyBindings.includes(kb))
-      .forEach((kb) => {
-        const strategy = kb.strategy;
-        if (strategy) {
-          strategy.destroy();
-          this.strategyRefs.delete(strategy);
-        }
-      });
+    this.#isOpen() ? this.hideOverlay() : this.showOverlay();
   }
 }

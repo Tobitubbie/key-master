@@ -19,3 +19,5 @@ export type GlobalContainerConfig = {
   ignoreTargets: IgnoreTarget[],
   element: Element,
 }
+
+export type ActiveElement = Element | null;

@@ -1,9 +1,9 @@
 <!-- Overlay-Container -->
-<div *ngIf="overlayService.isOpen"
+<div *ngIf="overlayService.isOpen()"
      @zoom
      class="flex gap-8 shadow-lg bg-neutral-800/80 p-4 rounded-xl backdrop-blur-md text-neutral-300">
 
-  <ng-container *ngIf="overlayService.activeKeyBindings$ | async as groups">
+  <ng-container *ngIf="overlayService.activeKeyBindings() as groups">
 
     <ng-container *ngFor="let group of groups | keyvalue : groupsSort ; trackBy: trackByGroup">
 
