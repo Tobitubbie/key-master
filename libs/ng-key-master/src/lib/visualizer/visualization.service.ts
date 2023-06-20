@@ -22,7 +22,8 @@ function distinctByKey(keyBindings: KeyBinding[]): KeyBinding[] {
 
 @Injectable({providedIn: 'root'})
 export class VisualizationService {
-  strategyRefs = new Set<VisualizationStrategy>();
+
+  #strategies = new Set<VisualizationStrategy>();
 
   activeKeyBindings = computed(() => groupKeyBindingsByContainer(this.keyMasterService.activeContainers()));
 
@@ -46,15 +47,20 @@ export class VisualizationService {
 
     // on active-containers change: handles creation/destruction of all visualizations
     effect(() => {
-      this.strategyRefs.forEach(s => s.destroy());
-      this.strategyRefs.clear();
 
-      this.keyMasterService.activeContainers()
-        .flatMap(c => c.keyBindings())
+      const activeKeyBindings = this.keyMasterService.activeContainers()
+        .flatMap(c => c.keyBindings());
+
+      this.#strategies.forEach(s => {
+        if (!activeKeyBindings.some(kb => kb.strategy === s)) s.destroy()
+      });
+      this.#strategies.clear();
+
+      activeKeyBindings
         .forEach(kb => {
           const strategy = kb.strategy;
           if (strategy) {
-            this.strategyRefs.add(strategy);
+            this.#strategies.add(strategy);
             strategy.create(kb);
             this.#isOpen() ? strategy.show() : strategy.hide();
           }
@@ -67,14 +73,14 @@ export class VisualizationService {
       if (!this.#globalPortal.isAttached) {
         this.#globalPortal.attach(this.#globalOverlayHost);
       }
-      this.strategyRefs.forEach((strategy) => strategy.show());
+      this.#strategies.forEach((strategy) => strategy.show());
     }
     this.#isOpen.set(true);
   }
 
   hideOverlay(): void {
     if (this.#isOpen()) {
-      this.strategyRefs.forEach((strategy) => strategy.hide());
+      this.#strategies.forEach((strategy) => strategy.hide());
     }
     this.#isOpen.set(false);
   }

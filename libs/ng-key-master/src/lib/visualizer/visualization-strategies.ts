@@ -1,5 +1,4 @@
 import {inject, Injectable, Injector, Renderer2, RendererFactory2,} from '@angular/core';
-import {VisualizationService} from './visualization.service';
 import {KeyBinding} from '../models';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {
@@ -26,17 +25,13 @@ export type VisualizationStrategyOption = keyof VisualizationStrategyOptions;
  * This class primarily acts as a factory for VisualizationStrategy instances.
  * Mimics Angular-CDKs architecture for overlay's scroll-strategy: https://github.com/angular/components/blob/main/src/cdk/overlay/scroll/scroll-strategy-options.ts
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class VisualizationStrategyOptions {
   readonly #renderer = inject(RendererFactory2).createRenderer(null, null);
   readonly #overlayService = inject(Overlay);
-  readonly #visualizationService = inject(VisualizationService);
 
   overlay = () =>
-    new OverlayVisualizationStrategy(
-      this.#overlayService,
-      this.#visualizationService
-    );
+    new OverlayVisualizationStrategy(this.#overlayService);
   noop = () => new NoopVisualizationStrategy();
   inline = () => new InlineVisualizationStrategy(this.#renderer);
 }
@@ -99,8 +94,8 @@ export class OverlayVisualizationStrategy implements VisualizationStrategy {
 
   constructor(
     private overlay: Overlay,
-    private visualizationService: VisualizationService
-  ) {}
+  ) {
+  }
 
   hide() {
     if (this.#portal.isAttached) {
@@ -145,11 +140,7 @@ export class OverlayVisualizationStrategy implements VisualizationStrategy {
     }
 
     this.#portal.injector = Injector.create({
-      providers: [{ provide: KEY_BINDING_OVERLAY_DATA, useValue: keyBinding }],
+      providers: [{provide: KEY_BINDING_OVERLAY_DATA, useValue: keyBinding}],
     });
-
-    if (this.visualizationService.isOpen()) {
-      this.show();
-    }
   }
 }
