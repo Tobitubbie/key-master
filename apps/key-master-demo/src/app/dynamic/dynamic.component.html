@@ -2,8 +2,13 @@
 
   <button (click)="showContent = !showContent">Toggle Content</button>
 
-  <div *ngIf="showContent">
+  <ng-container *ngIf="showContent">
+
     <p kmKeyBinding key="shift + D" (action)="run()" label="Dynamic Action" tabindex="0">Some content</p>
-  </div>
+
+    <button (click)="showMoreContent = !showMoreContent">Toggle more Content</button>
+    <p *ngIf="showMoreContent" kmKeyBinding key="shift + F" (action)="run()" label="Nested Dynamic Action" tabindex="0">More Content</p>
+
+  </ng-container>
 
 </div>

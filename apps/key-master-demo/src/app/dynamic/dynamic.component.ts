@@ -11,6 +11,7 @@ import {KeyBindingDirective, KeyBindingsContainerDirective} from "@key-master/ng
 export class DynamicComponent {
 
   showContent = false;
+  showMoreContent = false;
 
   run() {
     console.log("Dynamic Keybinding triggered!");
