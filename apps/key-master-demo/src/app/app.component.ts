@@ -16,6 +16,7 @@ import {TextareaComponent} from "./textarea/textarea.component";
 import {NgForOf} from "@angular/common";
 import {ListComponent} from "./list/list.component";
 import {DynamicComponent} from "./dynamic/dynamic.component";
+import {WrappedListComponent} from "./list-navigation-wrapper/wrapped-list/wrapped-list.component";
 
 @Component({
   standalone: true,
@@ -27,6 +28,7 @@ import {DynamicComponent} from "./dynamic/dynamic.component";
     KeyBindingDirective,
     ListComponent,
     DynamicComponent,
+    WrappedListComponent,
   ],
   selector: 'key-master-root',
   templateUrl: './app.component.html',

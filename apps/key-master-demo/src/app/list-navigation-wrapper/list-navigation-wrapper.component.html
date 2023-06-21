@@ -1,0 +1,14 @@
+<div kmKeysContainer
+              name="List-Navigation"
+              [strategy]="strategyOptions.merge()"
+              [ignoreTargets]="[]">
+
+  <div [kmMultiKeyBindings]="boundKeyBindings" #keyBindingElement>
+
+    <ng-content></ng-content>
+
+  </div>
+
+
+</div>
+

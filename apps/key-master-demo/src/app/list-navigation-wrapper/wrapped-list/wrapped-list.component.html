@@ -1,0 +1,31 @@
+
+<key-master-list-navigation-wrapper
+  (focusPrevious)="focusPreviousItem()"
+  (focusNext)="focusNextItem()"
+  (toggleAll)="toggleAll()"
+  (toggleCurrent)="toggleSelected(items[focusedItemIndex])">
+
+  <h1 class="text-xl">Wrapped-List</h1>
+
+  <div class="m-3">
+
+    <input type="checkbox" id="allCheckbox" [checked]="areAllSelected()" (change)="toggleAll()" />
+    <label for="allCheckbox">Toggle All</label>
+
+    <p>Focused Item Index: {{focusedItemIndex}}</p>
+
+    <ul class="mt-3">
+
+      <li #itemElements
+          *ngFor="let item of items; let i = index"
+          (focusin)="focusedItemIndex = i">
+
+        <input type="checkbox" [id]="'checkbox_'+item" [checked]="isSelected(item)" (change)="toggleSelected(item)">
+        <label [for]="'checkbox_'+item">{{item}}</label>
+
+      </li>
+    </ul>
+
+  </div>
+
+</key-master-list-navigation-wrapper>
