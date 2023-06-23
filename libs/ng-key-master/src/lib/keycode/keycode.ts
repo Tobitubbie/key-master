@@ -35,6 +35,7 @@ export const ALIASES: Record<string, string> = {
   command: 'meta',
   win: 'meta',
   windows: 'meta',
+  os: 'meta',
   ctl: 'control',
   ctrl: 'control',
   opt: 'alt',
@@ -69,7 +70,7 @@ function isModifier(key: string): key is Modifier {
 function checkModifiers(event: KeyboardEvent, modifiers: string[]): boolean {
   return event.ctrlKey === modifiers.includes('ctrlKey')
     && event.altKey === modifiers.includes('altKey')
-    && event.metaKey === modifiers.includes('metaKey')
+    && (event.metaKey === modifiers.includes('metaKey') || event.getModifierState('OS') === modifiers.includes('metaKey')) // fixes firefox issue: windows-key no longer considered "meta" -> https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/metaKey
     && event.shiftKey === modifiers.includes('shiftKey');
 }
 
