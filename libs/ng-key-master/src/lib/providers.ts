@@ -1,5 +1,5 @@
 import {EnvironmentProviders, makeEnvironmentProviders} from "@angular/core";
-import {StrategyOption, StrategyOptions} from "./strategies";
+import {StrategyOption, StrategyOptions} from "./strategies/strategy-options";
 import {
   DEFAULT_CONTAINER_STRATEGY,
   DEFAULT_IGNORE_TARGETS,

@@ -1,6 +1,5 @@
 export * from './lib/key-master.service';
 export * from './lib/models';
-export * from './lib/strategies';
 export * from './lib/key-bindings-container.directive';
 export * from './lib/multi-key-bindings.directive';
 export * from './lib/key-binding.directive';
@@ -16,3 +15,11 @@ export * from './lib/visualizer/visualization-strategies';
 // Keycode
 export * from './lib/keycode/keycode';
 export * from './lib/keycode/symbolizeKey.pipe';
+
+// Strategies
+export * from './lib/strategies/strategy-options';
+export * from "./lib/strategies/exclusive-strategy";
+export * from "./lib/strategies/merge-strategy";
+export * from "./lib/strategies/bubble-strategy";
+export * from "./lib/strategies/noop-strategy";
+export * from "./lib/strategies/strategy";

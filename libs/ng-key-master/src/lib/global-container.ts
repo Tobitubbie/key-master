@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {Container} from "./container";
 import {GLOBAL_CONTAINER_CONFIG} from "./tokens";
-import {NoopStrategy} from "./strategies";
+import {NoopStrategy} from "./strategies/noop-strategy";
 
 
 @Injectable({providedIn: 'root'})

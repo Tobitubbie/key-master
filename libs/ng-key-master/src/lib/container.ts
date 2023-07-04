@@ -1,7 +1,8 @@
 import {IgnoreTarget, KeyBinding} from './models';
-import {NoopStrategy, Strategy} from './strategies';
 import {keycodeMatchesEvent} from "./keycode/keycode";
 import {signal} from "@angular/core";
+import {NoopStrategy} from "./strategies/noop-strategy";
+import {Strategy} from "./strategies/strategy";
 
 export abstract class Container {
 
