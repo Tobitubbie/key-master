@@ -1,5 +1,17 @@
 # ng-key-master
 
+## Best Practices
+
+- only use keys a-z, 0-9, f1-f12, arrow-keys
+  - no numpad -> not available on all keyboards (e.g. notebooks)
+  - no special keys (e.g. insert, delete, home, end, page up, page down) -> not available on all keyboards
+  - no language specific keys (e.g. ä, ö, ü, ß)
+
+- be careful using modifiers
+  - meta should be avoided -> might conflict with os (e.g. windows) 
+  - if used, call `preventDefault` to prevent browser shortcuts
+  
+
 ## Active Element
 
 Tracks the currently active element in the DOM.  

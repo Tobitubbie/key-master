@@ -1,0 +1,14 @@
+<table class="w-16 text-center">
+  <thead>
+  <tr>
+    <th>Alias</th>
+    <th>Symbol</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let alias of aliases">
+    <td>{{alias}}</td>
+    <td>{{alias | symbolizeKey}}</td>
+  </tr>
+  </tbody>
+</table>

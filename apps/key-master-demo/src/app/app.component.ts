@@ -17,6 +17,8 @@ import {NgForOf} from "@angular/common";
 import {ListComponent} from "./list/list.component";
 import {DynamicComponent} from "./dynamic/dynamic.component";
 import {WrappedListComponent} from "./list-navigation-wrapper/wrapped-list/wrapped-list.component";
+import {AliasSymbolsComponent} from "./alias-symbols/alias-symbols.component";
+
 
 @Component({
   standalone: true,
@@ -29,6 +31,7 @@ import {WrappedListComponent} from "./list-navigation-wrapper/wrapped-list/wrapp
     ListComponent,
     DynamicComponent,
     WrappedListComponent,
+    AliasSymbolsComponent,
   ],
   selector: 'key-master-root',
   templateUrl: './app.component.html',

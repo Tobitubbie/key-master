@@ -6,6 +6,7 @@ import {
   KeyBindingOverlayComponent,
 } from './key-binding-overlay/key-binding-overlay.component';
 import {ComponentPortal} from '@angular/cdk/portal';
+import {symbolizeKeycode} from "../keycode/symbolizeKey.pipe";
 
 export interface VisualizationStrategy {
   show(): void;
@@ -76,7 +77,8 @@ export class InlineVisualizationStrategy implements VisualizationStrategy {
   }
 
   create(keyBinding: KeyBinding) {
-    this.element.textContent = ` (${keyBinding.key})`;
+    const transformedKey = symbolizeKeycode(keyBinding.key);
+    this.element.textContent = ` (${transformedKey})`;
     this.renderer.appendChild(keyBinding.element, this.element);
   }
 

@@ -1,10 +1,11 @@
-
 /**
  * NOTES:
  * - inspired by https://github.com/ianstormtaylor/is-hotkey
  * - firefox only partially supported:
  *    - firefox does not set metaKey
  *    - firefox uses 'OS' as key instead of 'Meta'
+ *
+ * - auto-transforms letters and digits to key-, digit-, numpad-codes
  */
 
 export type Modifier = 'alt' | 'control' | 'meta' | 'shift';
@@ -29,6 +30,7 @@ export const ALIASES: Record<string, string> = {
   space: ' ',
   spacebar: ' ',
   up: 'arrowup',
+  caps: 'capslock',
 
   // Modifier-Aliases
   cmd: 'meta',
@@ -63,7 +65,7 @@ export function keycodeMatchesEvent(keycode: string, event: KeyboardEvent): bool
   return modifiersPass && keyPass;
 }
 
-function isModifier(key: string): key is Modifier {
+export function isModifier(key: string): key is Modifier {
   return key in MODIFIERS;
 }
 
@@ -75,6 +77,5 @@ function checkModifiers(event: KeyboardEvent, modifiers: string[]): boolean {
 }
 
 function checkKey(event: KeyboardEvent, key: string | undefined): boolean {
-  return key === undefined
-    || (!isModifier(key) && key === event.key.toLowerCase());
+  return key === undefined || (!isModifier(key) && key === event.key.toLowerCase());
 }

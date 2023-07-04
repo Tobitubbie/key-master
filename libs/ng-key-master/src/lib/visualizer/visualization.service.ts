@@ -1,5 +1,5 @@
 import {computed, effect, Injectable, signal} from '@angular/core';
-import {OverlayComponent} from './overlay.component';
+import {OverlayComponent} from './overlay/overlay.component';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {KeyMasterService} from '../key-master.service';
 import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';

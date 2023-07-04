@@ -1,16 +1,17 @@
 import {Component, TrackByFunction} from '@angular/core';
 import {transition, trigger, useAnimation} from '@angular/animations';
-import {VisualizationService} from './visualization.service';
-import {KeyBinding} from '../models';
-import {fadeIn, zoomIn, zoomOut} from './animations';
+import {VisualizationService} from '../visualization.service';
+import {KeyBinding} from '../../models';
+import {fadeIn, zoomIn, zoomOut} from '../animations';
 import {AsyncPipe, KeyValue, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import {SymbolizeKeyPipe} from "../../keycode/symbolizeKey.pipe";
 
 @Component({
   selector: 'km-overlay',
   templateUrl: 'overlay.component.html',
   styleUrls: ['overlay.component.scss'],
   standalone: true,
-  imports: [NgForOf, KeyValuePipe, AsyncPipe, NgIf],
+  imports: [NgForOf, KeyValuePipe, AsyncPipe, NgIf, SymbolizeKeyPipe],
   animations: [
     trigger('zoom', [
       transition(':enter', useAnimation(zoomIn)),

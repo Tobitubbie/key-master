@@ -2,6 +2,7 @@ import { Component, Inject, InjectionToken } from '@angular/core';
 import { KeyBinding } from '../../models';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { zoomIn } from '../animations';
+import {SymbolizeKeyPipe} from "../../keycode/symbolizeKey.pipe";
 
 export type KeyBindingOverlayData = KeyBinding;
 export const KEY_BINDING_OVERLAY_DATA =
@@ -12,6 +13,7 @@ export const KEY_BINDING_OVERLAY_DATA =
   templateUrl: './key-binding-overlay.component.html',
   animations: [trigger('zoom', [transition(':enter', useAnimation(zoomIn))])],
   standalone: true,
+  imports: [SymbolizeKeyPipe],
 })
 export class KeyBindingOverlayComponent {
   constructor(

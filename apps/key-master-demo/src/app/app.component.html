@@ -6,15 +6,15 @@
     <button>Zzzz</button>
   </div>
 
-  <hr />
+  <hr>
 
   <key-master-dynamic></key-master-dynamic>
 
-  <hr/>
+  <hr>
 
   <key-master-wrapped-list></key-master-wrapped-list>
 
-  <hr/>
+  <hr>
 
   <key-master-list></key-master-list>
 
@@ -22,7 +22,7 @@
 
   <key-master-textarea></key-master-textarea>
 
-  <hr/>
+  <hr>
 
   <div kmKeysContainer name="Empty Container" [strategy]="strategyOptions.exclusive()">
     <div kmKeysContainer [strategy]="strategyOptions.bubble()">
@@ -79,10 +79,14 @@
     </ul>
   </div>
 
-  <hr/>
+  <hr>
 
   <h1>Visualization</h1>
 
   <button (click)="overlayService.toggleOverlay()">Toggle Overlay</button>
+
+  <hr>
+
+  <key-master-alias-symbols></key-master-alias-symbols>
 
 </section>

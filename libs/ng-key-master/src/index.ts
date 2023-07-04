@@ -10,6 +10,9 @@ export * from './lib/container';
 export * from './lib/global-container';
 
 // Visualization
-
 export * from './lib/visualizer/visualization.service';
 export * from './lib/visualizer/visualization-strategies';
+
+// Keycode
+export * from './lib/keycode/keycode';
+export * from './lib/keycode/symbolizeKey.pipe';
