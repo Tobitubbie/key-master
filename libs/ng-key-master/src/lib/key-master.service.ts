@@ -20,7 +20,7 @@ export class KeyMasterService {
 
   activeContainers = computed(() => {
     const activeContainers = this.#closestContainer().discoverParentContainers();
-    activeContainers.forEach(c => c.keyBindings()); // workaround to detect changes of keybindings
+    activeContainers.forEach(c => c.keyBindings()); // workaround to detect changes of keybindings TODO: check if still necessary
     return activeContainers;
   });
 
