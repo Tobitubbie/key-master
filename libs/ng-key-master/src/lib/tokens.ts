@@ -1,11 +1,11 @@
 import {inject, InjectionToken, Signal} from "@angular/core";
-import {VisualizationStrategy} from "./visualizer/visualization-strategies";
 import {ActiveElement, GlobalContainerConfig, IgnoreTarget} from "./models";
 import {DOCUMENT} from "@angular/common";
 import {fromEvent, merge} from "rxjs";
 import {debounceTime, map} from "rxjs/operators";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {Strategy} from "./strategies/strategy";
+import {VisualizationStrategy} from "./visualizer/strategies/visualization-strategy";
 
 
 export const DEFAULT_CONTAINER_STRATEGY = new InjectionToken<() => Strategy>('DefaultContainerStrategy'); // return fn instead of value to create a new instance foreach usage

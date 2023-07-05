@@ -6,7 +6,7 @@ import {
   DEFAULT_VISUALIZATION_STRATEGY,
   GLOBAL_CONTAINER_CONFIG
 } from "./tokens";
-import {VisualizationStrategyOption, VisualizationStrategyOptions} from "./visualizer/visualization-strategies";
+import {VisualizationStrategyOption, VisualizationStrategyOptions} from "./visualizer/strategies/visualization-strategy-options";
 import {GlobalContainerConfig, IgnoreTarget} from "./models";
 
 

@@ -1,9 +1,9 @@
 import {Directive, ElementRef, inject, Input, OnDestroy, OnInit,} from '@angular/core';
 import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
-import {VisualizationStrategy} from "./visualizer/visualization-strategies";
 import {KeyMasterService} from "./key-master.service";
 import {Container} from "./container";
 import {KeyBinding} from "./models";
+import {VisualizationStrategy} from "./visualizer/strategies/visualization-strategy";
 
 
 @Directive({

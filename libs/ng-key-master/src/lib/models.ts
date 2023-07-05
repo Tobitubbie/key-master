@@ -1,4 +1,4 @@
-import {VisualizationStrategy} from './visualizer/visualization-strategies';
+import {VisualizationStrategy} from "./visualizer/strategies/visualization-strategy";
 
 export type Shortcut = {
   key: string;

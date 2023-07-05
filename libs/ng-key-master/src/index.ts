@@ -10,7 +10,11 @@ export * from './lib/global-container';
 
 // Visualization
 export * from './lib/visualizer/visualization.service';
-export * from './lib/visualizer/visualization-strategies';
+export * from './lib/visualizer/strategies/visualization-strategy-options';
+export * from "./lib/visualizer/strategies/visualization-strategy";
+export * from "./lib/visualizer/strategies/noop-visualization-strategy";
+export * from "./lib/visualizer/strategies/overlay-visualization-strategy";
+export * from "./lib/visualizer/strategies/inline-visualization-strategy";
 
 // Keycode
 export * from './lib/keycode/keycode';

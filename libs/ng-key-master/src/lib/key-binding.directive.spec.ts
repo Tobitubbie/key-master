@@ -3,8 +3,8 @@ import {ElementRef, EventEmitter} from "@angular/core";
 import {KeyBindingDirective} from "./key-binding.directive";
 import {provideKeyMaster} from "./providers";
 import {KeyMasterService} from "./key-master.service";
-import {NoopVisualizationStrategy} from "./visualizer/visualization-strategies";
 import {Container} from "./container";
+import {NoopVisualizationStrategy} from "./visualizer/strategies/noop-visualization-strategy";
 
 
 describe('KeyBindingDirective', () => {
