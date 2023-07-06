@@ -12,8 +12,8 @@ import {Injector} from "@angular/core";
  * Spawns an overlay at the host element showing the key binding.
  */
 export class OverlayVisualizationStrategy implements VisualizationStrategy {
-  #overlayRef: OverlayRef | undefined;
-  #portal = new ComponentPortal(KeyBindingOverlayComponent);
+  overlayRef: OverlayRef | undefined;
+  portal = new ComponentPortal(KeyBindingOverlayComponent);
 
   constructor(
     private overlay: Overlay,
@@ -21,20 +21,20 @@ export class OverlayVisualizationStrategy implements VisualizationStrategy {
   }
 
   hide() {
-    if (this.#portal.isAttached) {
-      this.#portal.detach();
+    if (this.portal.isAttached) {
+      this.portal.detach();
     }
   }
 
   show() {
-    if (!this.#portal.isAttached && this.#overlayRef) {
-      this.#portal.attach(this.#overlayRef);
+    if (!this.portal.isAttached && this.overlayRef) {
+      this.portal.attach(this.overlayRef);
     }
   }
 
   destroy() {
-    this.#overlayRef?.dispose();
-    this.#overlayRef = undefined;
+    this.overlayRef?.dispose();
+    this.overlayRef = undefined;
   }
 
   create(keyBinding: KeyBinding) {
@@ -43,8 +43,8 @@ export class OverlayVisualizationStrategy implements VisualizationStrategy {
     }
 
     // skip if host already spawned
-    if (!this.#overlayRef) {
-      this.#overlayRef = this.overlay.create({
+    if (!this.overlayRef) {
+      this.overlayRef = this.overlay.create({
         positionStrategy: this.overlay
           .position()
           .flexibleConnectedTo(keyBinding.element)
@@ -62,7 +62,7 @@ export class OverlayVisualizationStrategy implements VisualizationStrategy {
       });
     }
 
-    this.#portal.injector = Injector.create({
+    this.portal.injector = Injector.create({
       providers: [{provide: KEY_BINDING_OVERLAY_DATA, useValue: keyBinding}],
     });
   }
