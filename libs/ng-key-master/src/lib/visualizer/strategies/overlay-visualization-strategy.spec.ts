@@ -55,7 +55,7 @@ describe('OverlayVisualizationStrategy', () => {
 
     it('should throw if element is missing', () => {
       keyBinding.element = undefined;
-      expect(() => strategy.create(keyBinding)).toThrow();
+      expect(() => strategy.create(keyBinding)).toThrow(/.*Creation failed due to missing property "element"/i);
     });
 
     it('should skip overlay create if already created', () => {

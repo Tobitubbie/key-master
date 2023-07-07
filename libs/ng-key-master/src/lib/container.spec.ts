@@ -38,7 +38,7 @@ describe('Container', () => {
 
   it('should throw error on duplicate key binding', () => {
     container.addKeyBinding(keyBinding);
-    expect(() => container.addKeyBinding(keyBinding)).toThrow();
+    expect(() => container.addKeyBinding(keyBinding)).toThrow(/.*binding for key .* already exists/i);
   });
 
   it('should add multiple multi key bindings', () => {

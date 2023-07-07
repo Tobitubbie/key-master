@@ -41,7 +41,8 @@ describe('KeyBindingDirective', () => {
 
   it('should throw an error if no container is found', () => {
     jest.spyOn(service, 'getParentContainerFromElement').mockReturnValue(undefined);
-    expect(keyBindingDirective.ngAfterViewInit).toThrow();
+    expect(() => keyBindingDirective.ngAfterViewInit()).toThrow('KeyBindingDirective must be used inside a KeyBindingsContainerDirective');
+
   });
 
   it('should add key binding to container', () => {
