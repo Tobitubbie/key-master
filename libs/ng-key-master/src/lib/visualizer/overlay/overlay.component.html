@@ -5,14 +5,18 @@
 
   <ng-container *ngIf="overlayService.activeKeyBindings() as groups">
 
-    <ng-container *ngFor="let group of groups | keyvalue : groupsSort ; trackBy: trackByGroup">
+    <ng-container *ngFor="let group of groups | keyvalue : groupsSort ; trackBy: trackByKey">
 
       <!-- Action/KeyBinding Group -->
       <div *ngIf="group.value.length > 0"
            class="flex flex-col min-w-[250px] whitespace-nowrap text-ellipsis overflow-hidden">
 
         <!-- Group-Name -->
-        <p @fade class="font-bold text-xl mb-1">{{ group.key }}</p>
+        <p @fade
+           class="font-bold text-xl mb-1"
+           data-test="group-name">
+          {{ group.key }}
+        </p>
 
         <!-- KeyBindings List -->
         <ul class="divide-y rounded-full divide-neutral-500">
@@ -36,7 +40,11 @@
     </ng-container>
 
     <ng-container *ngIf="isEmpty(groups)">
-      <p @fade class="font-light italic">No key-bindings</p>
+      <p @fade
+         class="font-light italic"
+         data-test="empty-message">
+        No key-bindings
+      </p>
     </ng-container>
 
   </ng-container>

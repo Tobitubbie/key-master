@@ -21,12 +21,12 @@ import {SymbolizeKeyPipe} from "../../keycode/symbolizeKey.pipe";
   ],
 })
 export class OverlayComponent {
-  trackByGroup: TrackByFunction<KeyValue<string, KeyBinding[]>> = (_, x) =>
+  trackByKey: TrackByFunction<KeyValue<string, KeyBinding[]>> = (_, x) =>
     x.key;
   trackByElement: TrackByFunction<KeyBinding> = (_, keyBinding) =>
     keyBinding.element;
 
-  // KeyValue pipe orders by key, by returning 1 the order is kept as is
+  // KeyValue pipe orders by map-key, by returning 1 the order is kept as is
   groupsSort = (
     _a: KeyValue<string, KeyBinding[]>,
     _b: KeyValue<string, KeyBinding[]>
