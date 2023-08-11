@@ -58,7 +58,7 @@ export class MultiKeyBindingsDirective implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.#keyBindings.forEach(keyBinding => {
-      this.#assignedContainer?.addKeyBinding(keyBinding);
+      this.#assignedContainer?.removeKeyBinding(keyBinding);
     });
   }
 }
