@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {
   ACTIVE_ELEMENT,
   ActiveElement,
+  AnnouncerService,
   KeyBinding,
   KeyBindingDirective,
   KeyBindingsContainerDirective,
@@ -47,7 +48,14 @@ export class AppComponent implements OnInit, OnDestroy {
     public readonly overlayService: VisualizationService,
     public readonly strategyOptions: StrategyOptions,
     public readonly visualizationStrategyOptions: VisualizationStrategyOptions,
+    public readonly announcerService: AnnouncerService,
   ) {
+  }
+
+  announceCounter = 0;
+
+  async announce() {
+    await this.announcerService.announce(`TEEEEEEEEEEST called${this.announceCounter++}`, 'assertive');
   }
 
   ngOnInit() {
@@ -58,6 +66,8 @@ export class AppComponent implements OnInit, OnDestroy {
     };
     this.keyMasterService.globalContainer.addKeyBinding(key);
     this.globalKeyBindings.push(key);
+
+    this.announcerService.enable();
   }
 
   getDummyAction(key: string): void {
@@ -72,5 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.globalKeyBindings.forEach((keyBinding) =>
       this.keyMasterService.globalContainer.removeKeyBinding(keyBinding)
     );
+
+    this.announcerService.disable();
   }
 }

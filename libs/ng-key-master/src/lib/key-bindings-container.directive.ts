@@ -2,7 +2,6 @@ import {Directive, ElementRef, HostListener, inject, Input, OnDestroy, OnInit,} 
 import {Container} from './container';
 import {IgnoreTarget} from './models';
 import {KeyMasterService} from './key-master.service';
-import {StrategyOptions} from './strategies/strategy-options';
 import {DEFAULT_CONTAINER_STRATEGY, DEFAULT_IGNORE_TARGETS} from "./tokens";
 import {Strategy} from "./strategies/strategy";
 
@@ -28,7 +27,6 @@ export class KeyBindingsContainerDirective extends Container implements OnInit, 
 
   constructor(
     private service: KeyMasterService,
-    private strategyOptions: StrategyOptions,
     private elementRef: ElementRef<Element>
   ) {
     super();

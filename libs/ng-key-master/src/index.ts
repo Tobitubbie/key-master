@@ -27,3 +27,6 @@ export * from "./lib/strategies/merge-strategy";
 export * from "./lib/strategies/bubble-strategy";
 export * from "./lib/strategies/noop-strategy";
 export * from "./lib/strategies/strategy";
+
+// Announcer
+export * from './lib/announcer/announcer.service';

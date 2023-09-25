@@ -4,23 +4,12 @@ import {ComponentPortal} from '@angular/cdk/portal';
 import {KeyMasterService} from '../key-master.service';
 import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';
 import {KeyBinding} from '../models';
-import {Container} from "../container";
 import {VisualizationStrategy} from "./strategies/visualization-strategy";
+import {groupKeyBindingsByContainer} from '../utils';
 
 
+// TODO: make configurable (or enforce container-name)
 export const containerNameFallback = 'Others';
-
-function groupKeyBindingsByContainer(containers: Container[]): Map<string, KeyBinding[]> {
-  const groups = new Map<string, KeyBinding[]>();
-  containers.forEach((container) => groups.set(container.name ?? containerNameFallback, distinctByKey(container.keyBindings())));
-  return groups;
-}
-
-function distinctByKey(keyBindings: KeyBinding[]): KeyBinding[] {
-  return keyBindings.filter(keyBinding => {
-    return keyBindings.findIndex(kb => kb.key === keyBinding.key) === keyBindings.indexOf(keyBinding);
-  })
-}
 
 @Injectable({providedIn: 'root'})
 export class VisualizationService {
@@ -29,7 +18,7 @@ export class VisualizationService {
 
   activeKeyBindings = computed(() => groupKeyBindingsByContainer(this.keyMasterService.activeContainers()));
 
-  #isOpen = signal<boolean>(false);
+  #isOpen = signal(false);
   isOpen = this.#isOpen.asReadonly();
 
   #globalPortal = new ComponentPortal(OverlayComponent);
