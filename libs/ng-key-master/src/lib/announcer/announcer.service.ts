@@ -1,4 +1,4 @@
-import {effect, inject, Injectable, signal} from '@angular/core';
+import {computed, effect, inject, Injectable, signal, untracked} from '@angular/core';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {KeyMasterService} from '../key-master.service';
 import {Container} from '../container';
@@ -45,10 +45,12 @@ export class AnnouncerService {
 
   private async announceOnOverlayToggle() {
     const isOpen = this.#visualizationService.isOpen();
+    const activeContainers = untracked(this.#keyMasterService.activeContainers);
+
     let announcement = `Overlay ${isOpen ? 'opened' : 'closed'}.`;
 
     if (isOpen) {
-      announcement += ` ${this.#keyMasterService.activeContainers().map(containerAnnouncement).join(' ')}`;
+      announcement += ` ${activeContainers.map(containerAnnouncement).join(' ')}`;
     }
 
     await this.announce(announcement);
