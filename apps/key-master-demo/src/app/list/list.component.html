@@ -18,8 +18,8 @@
         *ngFor="let item of items; let i = index"
         (focusin)="setFocusedItemIndex(i)"
         [kmMultiKeyBindings]="[
-          {key: 'x', action: toggleSelected.bind(this, item), label: 'Toggle Current Selection', multi: true, strategy: i === 0 ? visualizationStrategyOptions.overlay() : undefined},
-          {key: 'd', action: duplicateSelected.bind(this, item), label: 'Duplicate Current Selection', multi: true, strategy: i === 0 ? visualizationStrategyOptions.overlay() : undefined},
+          {key: 'x', action: toggleSelected.bind(this, item), label: 'Toggle Current Selection', multi: true, strategy: i === 0 ? visualizationStrategyOptions.overlay() : visualizationStrategyOptions.noop()},
+          {key: 'd', action: duplicateSelected.bind(this, item), label: 'Duplicate Current Selection', multi: true, strategy: i === 0 ? visualizationStrategyOptions.overlay() : visualizationStrategyOptions.noop()},
         ]">
 
       <input type="checkbox" [id]="'checkbox_'+item" [checked]="isSelected(item)" (change)="toggleSelected(item)">
