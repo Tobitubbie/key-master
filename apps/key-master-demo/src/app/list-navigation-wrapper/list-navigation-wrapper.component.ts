@@ -81,7 +81,7 @@ export class ListNavigationWrapperComponent implements OnInit {
   ]);
 
   ngOnInit() {
-    const isObserved = (obj: unknown): obj is Subject<unknown> => obj instanceof Subject<unknown> && obj.observed;
+    const isObserved = (obj: unknown): obj is Subject<unknown> => obj instanceof Subject && obj.observed;
 
     Object.entries(this)
       .filter(([, value]) => isObserved(value))

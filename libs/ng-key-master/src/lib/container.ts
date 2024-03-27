@@ -18,7 +18,7 @@ export abstract class Container {
   addKeyBinding(keyBinding: KeyBinding): void {
     console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Adding KeyBinding ${keyBinding.label}`);
     if (keyBinding.multi || !this.#keyBindings().some(kb => kb.key === keyBinding.key)) {
-      this.#keyBindings.mutate(keyBindings => keyBindings.push(keyBinding));
+      this.#keyBindings.update(keyBindings => [...keyBindings, keyBinding]);
     } else {
       throw `[CONTAINER] ${this.name ?? 'unnamed'}: Binding for Key ${keyBinding.key} already exists`;
     }
@@ -26,12 +26,7 @@ export abstract class Container {
 
   removeKeyBinding(keyBinding: KeyBinding): void {
     console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Removing KeyBinding ${keyBinding.label}`);
-    this.#keyBindings.mutate((keyBindings) => {
-      const index = keyBindings.indexOf(keyBinding);
-      if (index > -1) {
-        keyBindings.splice(index, 1);
-      }
-    })
+    this.#keyBindings.update(keyBindings => keyBindings.filter(kb => kb !== keyBinding));
   }
 
   onKeyboardEvent(event: KeyboardEvent): void {

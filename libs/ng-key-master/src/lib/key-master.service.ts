@@ -27,11 +27,14 @@ export class KeyMasterService {
   readonly globalContainer: Container = inject(GlobalContainer);
 
   registerContainer(container: Container): void {
-    this.#containers.mutate((containers) => containers.add(container));
+    this.#containers.update((containers) => containers.add(container));
   }
 
   deregisterContainer(container: Container): void {
-    this.#containers.mutate((containers) => containers.delete(container));
+    this.#containers.update((containers) => {
+      containers.delete(container);
+      return containers;
+    });
   }
 
   getParentContainerFromElement(element: Element | null | undefined): Container | undefined {
