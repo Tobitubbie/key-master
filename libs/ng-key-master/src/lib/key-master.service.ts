@@ -18,11 +18,7 @@ export class KeyMasterService {
   #closestContainer = computed(() => this.getParentContainerFromElement(this.#activeElement()) ?? this.globalContainer,
     {equal: (prev, cur) => prev === cur});
 
-  activeContainers = computed(() => {
-    const activeContainers = this.#closestContainer().discoverParentContainers();
-    activeContainers.forEach(c => c.keyBindings()); // workaround to detect changes of keybindings TODO: check if still necessary
-    return activeContainers;
-  });
+  activeContainers = computed(() => this.#closestContainer().discoverParentContainers());
 
   readonly globalContainer: Container = inject(GlobalContainer);
 
