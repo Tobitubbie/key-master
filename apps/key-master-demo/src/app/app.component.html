@@ -36,6 +36,19 @@
     <button kmKeyBinding key="x" (action)="getDummyAction('x')" label="DummyLabel_X">KeyBinding outside any Container</button>
   </div>
 
+  <div>
+    <div kmKeysContainer name="Duplicate Name">
+      <p kmKeyBinding key="g" (action)="getDummyAction('g')" label="DummyLabel_G" tabindex="0">Duplicate Container Name #1</p>
+    </div>
+    <div kmKeysContainer name="Duplicate Name">
+      <p kmKeyBinding key="f" (action)="getDummyAction('f')" label="DummyLabel_F" tabindex="0">Duplicate Container Name #2</p>
+
+      <div kmKeysContainer name="Duplicate Name" [strategy]="strategyOptions.bubble()">
+        <p kmKeyBinding key="h" (action)="getDummyAction('h')" label="DummyLabel_H" tabindex="0">Nested Duplicate Container Name #2</p>
+      </div>
+    </div>
+  </div>
+
   <div class="border border-red-500" kmKeysContainer>
     <div kmKeyBinding key="b" (action)="getDummyAction('b')" label="DummyLabel_B">
       <button>New Area</button>

@@ -1,6 +1,7 @@
 import {EnvironmentProviders, makeEnvironmentProviders} from "@angular/core";
 import {StrategyOption, StrategyOptions} from "./strategies/strategy-options";
 import {
+  DEFAULT_CONTAINER_NAME,
   DEFAULT_CONTAINER_STRATEGY,
   DEFAULT_IGNORE_TARGETS,
   DEFAULT_VISUALIZATION_STRATEGY,
@@ -11,6 +12,7 @@ import {GlobalContainerConfig, IgnoreTarget} from "./models";
 
 
 export interface KeyMasterConfig {
+  defaultContainerName?: string;
   defaultContainerStrategy?: StrategyOption;
   defaultVisualizationStrategy?: VisualizationStrategyOption;
   defaultIgnoreTargets?: IgnoreTarget[];
@@ -18,6 +20,7 @@ export interface KeyMasterConfig {
 }
 
 export const defaultConfig: Required<KeyMasterConfig> = {
+  defaultContainerName: 'Others',
   defaultContainerStrategy: 'merge',
   defaultVisualizationStrategy: 'overlay',
   defaultIgnoreTargets: [HTMLInputElement, HTMLTextAreaElement],
@@ -42,6 +45,10 @@ export function provideKeyMaster(userConfig: KeyMasterConfig = {}): EnvironmentP
   };
 
   return makeEnvironmentProviders([
+    {
+      provide: DEFAULT_CONTAINER_NAME,
+      useValue: config.defaultContainerName,
+    },
     {
       provide: DEFAULT_CONTAINER_STRATEGY,
       deps: [StrategyOptions],

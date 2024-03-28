@@ -1,11 +1,10 @@
-import {KeyBinding} from './models';
 import {Container} from './container';
-import {containerNameFallback} from './visualizer/visualization.service';
+import {KeyBinding} from './models';
 
 
 export function groupKeyBindingsByContainer(containers: Container[]): Map<string, KeyBinding[]> {
   const groups = new Map<string, KeyBinding[]>();
-  containers.forEach((container) => groups.set(container.name ?? containerNameFallback, distinctByKey(container.keyBindings())));
+  containers.forEach((container) => groups.set(container.name, distinctByKey(container.keyBindings())));
   return groups;
 }
 

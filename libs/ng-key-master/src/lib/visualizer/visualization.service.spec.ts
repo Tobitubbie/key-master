@@ -1,6 +1,6 @@
 import {TestBed} from "@angular/core/testing";
 import {signal} from "@angular/core";
-import {containerNameFallback, VisualizationService} from "./visualization.service";
+import {VisualizationService} from "./visualization.service";
 import {Container} from "../container";
 import {KeyMasterService} from "../key-master.service";
 import {provideKeyMaster} from "../providers";
@@ -9,7 +9,6 @@ import {KeyBinding} from "../models";
 
 class StubContainer extends Container {
   override keyBindings = signal<KeyBinding[]>([]);
-
   constructor() {
     super();
   }
@@ -68,7 +67,7 @@ describe('VisualizationService', () => {
       expect(service.activeKeyBindings().size).toBe(0);
     });
 
-    it('should group key bindings by container', () => {
+    it('should group key bindings by container name', () => {
       const keyBindings = [
         {
           key: 'a',
@@ -83,16 +82,17 @@ describe('VisualizationService', () => {
           }
         },
       ];
-      const unnamedContainer = new StubContainer();
-      unnamedContainer.keyBindings.set(keyBindings);
-      const namedContainer = new StubContainer();
-      namedContainer.keyBindings.set(keyBindings);
-      namedContainer.name = 'named';
+      const containerA = new StubContainer();
+      containerA.keyBindings.set(keyBindings);
+      containerA.name = 'A';
+      const containerB = new StubContainer();
+      containerB.keyBindings.set(keyBindings);
+      containerB.name = 'B';
 
-      activeContainers.set([unnamedContainer, namedContainer]);
+      activeContainers.set([containerA, containerB]);
 
-      expect(service.activeKeyBindings().get(namedContainer.name)).toEqual(keyBindings);
-      expect(service.activeKeyBindings().get(containerNameFallback)).toEqual(keyBindings);
+      expect(service.activeKeyBindings().get(containerB.name)).toEqual(keyBindings);
+      expect(service.activeKeyBindings().get(containerA.name)).toEqual(keyBindings);
     });
 
     it('should distinct key bindings by key', () => {

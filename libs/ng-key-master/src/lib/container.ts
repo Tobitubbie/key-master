@@ -11,21 +11,21 @@ export abstract class Container {
 
   ignoreTargets: IgnoreTarget[] = [];
   strategy: Strategy = new NoopStrategy();
+  name = 'Others';
 
-  name: string | undefined;
   element: Element | undefined;
 
   addKeyBinding(keyBinding: KeyBinding): void {
-    console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Adding KeyBinding ${keyBinding.label}`);
+    console.log(`[CONTAINER] ${this.name}: Adding KeyBinding ${keyBinding.label}`);
     if (keyBinding.multi || !this.#keyBindings().some(kb => kb.key === keyBinding.key)) {
       this.#keyBindings.update(keyBindings => [...keyBindings, keyBinding]);
     } else {
-      throw `[CONTAINER] ${this.name ?? 'unnamed'}: Binding for Key ${keyBinding.key} already exists`;
+      throw `[CONTAINER] ${this.name}: Binding for Key ${keyBinding.key} already exists`;
     }
   }
 
   removeKeyBinding(keyBinding: KeyBinding): void {
-    console.log(`[CONTAINER] ${this.name ?? 'unnamed'}: Removing KeyBinding ${keyBinding.label}`);
+    console.log(`[CONTAINER] ${this.name}: Removing KeyBinding ${keyBinding.label}`);
     this.#keyBindings.update(keyBindings => keyBindings.filter(kb => kb !== keyBinding));
   }
 

@@ -8,6 +8,8 @@ import {Strategy} from "./strategies/strategy";
 import {VisualizationStrategy} from "./visualizer/strategies/visualization-strategy";
 
 
+export const DEFAULT_CONTAINER_NAME = new InjectionToken<string>('DefaultContainerName');
+
 export const DEFAULT_CONTAINER_STRATEGY = new InjectionToken<() => Strategy>('DefaultContainerStrategy'); // return fn instead of value to create a new instance foreach usage
 
 export const DEFAULT_VISUALIZATION_STRATEGY = new InjectionToken<() => VisualizationStrategy>('DefaultVisualizationStrategy'); // return fn instead of value to create a new instance foreach usage

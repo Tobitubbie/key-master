@@ -1,15 +1,12 @@
-import {computed, effect, inject, Injectable, signal} from '@angular/core';
-import {OverlayComponent} from './overlay/overlay.component';
-import {ComponentPortal} from '@angular/cdk/portal';
-import {KeyMasterService} from '../key-master.service';
 import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';
+import {ComponentPortal} from '@angular/cdk/portal';
+import {computed, effect, inject, Injectable, signal} from '@angular/core';
+import {KeyMasterService} from '../key-master.service';
 import {KeyBinding} from '../models';
-import {VisualizationStrategy} from "./strategies/visualization-strategy";
 import {groupKeyBindingsByContainer} from '../utils';
+import {OverlayComponent} from './overlay/overlay.component';
+import {VisualizationStrategy} from "./strategies/visualization-strategy";
 
-
-// TODO: make configurable (or enforce container-name)
-export const containerNameFallback = 'Others';
 
 @Injectable({providedIn: 'root'})
 export class VisualizationService {
