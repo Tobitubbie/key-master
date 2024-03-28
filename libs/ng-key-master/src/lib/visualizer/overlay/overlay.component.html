@@ -22,13 +22,13 @@
         <ul class="divide-y rounded-full divide-neutral-500">
           <li *ngFor="let keyBinding of group.value; trackBy: trackByElement"
               @fade
-              class="flex justify-between items-center gap-3 px-1 py-3 font-light">
+              class="flex justify-between items-center gap-4 px-1 py-3 font-light">
 
             <span class="text-ellipsis overflow-hidden whitespace-nowrap">
               {{ keyBinding.label }}
             </span>
 
-            <span class="whitespace-nowrap bg-neutral-500 text-neutral-200 rounded px-2 py-1">
+            <span class="whitespace-nowrap bg-neutral-500 text-neutral-200 font-mono rounded px-2 py-1">
               {{ keyBinding.key | symbolizeKey }}
             </span>
 

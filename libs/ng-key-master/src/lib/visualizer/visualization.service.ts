@@ -20,6 +20,7 @@ export class VisualizationService {
 
   #globalPortal = new ComponentPortal(OverlayComponent);
   #globalOverlayHost = inject(Overlay).create({
+    maxWidth: '90vw',
     positionStrategy: new GlobalPositionStrategy()
       .centerHorizontally()
       .bottom('5vh'),
