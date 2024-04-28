@@ -89,8 +89,8 @@
 
     <ul>
       <!-- attr tabindex necessary to make div focusable -->
-      <li *ngFor="let i of ['1','2','3','4','5']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [key]="i" (action)="onListElementClick(i)" [label]="'DummyLabel_'+i">ListenElement #{{i}}</li>
-      <li (click)="onListElementClick('6')" tabindex="0" kmKeyBinding key="6" (action)="onListElementClick('6')" label="DummyLabel_6" [strategy]="visualizationStrategyOptions.noop()">ListenElement #6 (my VisualizationStrategy is Noop)</li>
+      <li *ngFor="let i of ['1','2','3','4','5', '6']" (click)="onListElementClick(i)" tabindex="0" kmKeyBinding [key]="i" (action)="onListElementClick(i)" [label]="'DummyLabel_'+i">ListenElement #{{i}}</li>
+      <li (click)="onListElementClick('7')" tabindex="0" kmKeyBinding key="7" (action)="onListElementClick('7')" label="DummyLabel_7" [strategy]="visualizationStrategyOptions.noop()">ListenElement #7 (my VisualizationStrategy is Noop)</li>
     </ul>
   </div>
 

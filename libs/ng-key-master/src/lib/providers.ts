@@ -1,4 +1,5 @@
 import {EnvironmentProviders, makeEnvironmentProviders} from "@angular/core";
+import {Strategy} from './strategies/strategy';
 import {StrategyOption, StrategyOptions} from "./strategies/strategy-options";
 import {
   DEFAULT_CONTAINER_NAME,
@@ -8,15 +9,21 @@ import {
   GLOBAL_CONTAINER_CONFIG
 } from "./tokens";
 import {VisualizationStrategyOption, VisualizationStrategyOptions} from "./visualizer/strategies/visualization-strategy-options";
-import {GlobalContainerConfig, IgnoreTarget} from "./models";
+import {IgnoreTarget} from "./models";
 
 
-export interface KeyMasterConfig {
+export type KeyMasterConfig = {
   defaultContainerName?: string;
   defaultContainerStrategy?: StrategyOption;
   defaultVisualizationStrategy?: VisualizationStrategyOption;
   defaultIgnoreTargets?: IgnoreTarget[];
   globalContainerConfig?: Partial<GlobalContainerConfig>;
+}
+
+export type GlobalContainerConfig = {
+  name: string,
+  ignoreTargets: IgnoreTarget[],
+  element: Element,
 }
 
 export const defaultConfig: Required<KeyMasterConfig> = {

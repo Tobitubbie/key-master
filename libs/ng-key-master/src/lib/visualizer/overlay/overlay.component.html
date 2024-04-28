@@ -1,52 +1,178 @@
+<!-- NEW -->
+<!--@if (overlayService.isOpen()) {-->
+
+<!--  <div class="flex bg-yellow-500">-->
+
+<!--  @for (group of overlayService.activeKeyBindings() | keyvalue : groupsSort ; track group) {-->
+<!--    <div class="grid grid-rows-{{gridConfig.maxRows}} grid-flow-col gap-2">-->
+<!--      <p class="col-start-1 col-span-{{group.value.length}}">{{group.key}}</p>-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+
+
+<!--      <p class="row-start-1 col-span-3">{{group.key}}</p>-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+
+<!--    </div>-->
+<!--  }-->
+
+<!--  </div>-->
+
+<!--  <div class="grid">-->
+<!--    &lt;!&ndash; Grid Header / Container Name &ndash;&gt;-->
+<!--    <div *ngFor="let group of overlayService.activeKeyBindings() | keyvalue : groupsSort ; trackBy: trackByKey" class="test-group">-->
+<!--      <p>{{ group.key }}</p>-->
+<!--      <ul>-->
+<!--        <li *ngFor="let keybinding of group.value">{{ keybinding.label }}</li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--}-->
+
+
 <!-- Overlay-Container -->
 <div *ngIf="overlayService.isOpen()"
      @zoom
-     class="flex gap-8 shadow-lg bg-neutral-800/80 p-4 rounded-xl backdrop-blur-md text-neutral-300">
+     class="flex gap-8 shadow-lg bg-neutral-800/80 p-6 rounded-xl backdrop-blur-md text-white">
 
-  <ng-container *ngIf="overlayService.activeKeyBindings() as groups">
+  <!-- TODO: foreach container  -->
 
-    <ng-container *ngFor="let group of groups | keyvalue : groupsSort ; trackBy: trackByKey">
+  <!-- Current Page -->
 
-      <!-- Action/KeyBinding Group -->
-      <div *ngIf="group.value.length > 0"
-           class="flex flex-col min-w-[250px] whitespace-nowrap text-ellipsis overflow-hidden">
+  @if (totalPages() > 0) {
+    <div class="flex flex-col min-w-[250px] whitespace-nowrap text-ellipsis overflow-hidden">
 
-        <!-- Group-Name -->
-        <p @fade
-           class="font-bold text-xl mb-1"
-           data-test="group-name">
-          {{ group.key }}
-        </p>
+      <!-- Groups -->
+      <div class="flex gap-4">
+        @for (containerName of overlayService.activeKeyBindings().keys(); track containerName) {
+          <!-- Group-Name -->
+          <p @fade
+             class="font-bold text-xl mb-1"
+             [class.text-neutral-500]="containerName !== currentPage().containerName"
+             data-test="group-name">
+            {{ containerName }}
+          </p>
 
-        <!-- KeyBindings List -->
-        <ul class="divide-y rounded-full divide-neutral-500">
-          <li *ngFor="let keyBinding of group.value; trackBy: trackByElement"
-              @fade
-              class="flex justify-between items-center gap-4 px-1 py-3 font-light">
-
-            <span class="text-ellipsis overflow-hidden whitespace-nowrap">
-              {{ keyBinding.label }}
-            </span>
-
-            <span class="whitespace-nowrap bg-neutral-500 text-neutral-200 font-mono rounded px-2 py-1">
-              {{ keyBinding.key | symbolizeKey }}
-            </span>
-
-          </li>
-        </ul>
-
+          <!-- NEW PAGINATOR - PER CONTAINER -->
+          <div class="absolute bottom-2 left-0 w-full flex gap-1 justify-center">
+            <!-- TODO: instead of totalPages -> pages.filterByContainerName.total -->
+            @for (page of totalPages() | numberIterator; track page) {
+              <div class="rounded-full h-2 w-2 bg-neutral-500"
+                   [ngClass]="{'!bg-neutral-300': page === currentPageIndex()}"></div>
+            }
+          </div>
+        }
       </div>
 
-    </ng-container>
+      <!-- KeyBinding-Grid -->
+      <div #grid class="grid grid-rows-2 grid-flow-col gap-2">
+        @for (keyBinding of currentPage().keyBindings; track keyBinding) {
+          <div @fade
+               class="flex justify-between items-center gap-4 px-1 py-3 font-light">
 
-    <ng-container *ngIf="isEmpty(groups)">
-      <p @fade
-         class="font-light italic"
-         data-test="empty-message">
-        No key-bindings
-      </p>
-    </ng-container>
+          <span class="text-ellipsis overflow-hidden whitespace-nowrap text-neutral-300">
+                  {{ keyBinding.label }}
+                </span>
 
-  </ng-container>
+            <span class="whitespace-nowrap bg-neutral-500 font-mono rounded px-2 py-1">
+                  {{ keyBinding.key | symbolizeKey }}
+                </span>
+          </div>
+        }
+      </div>
+
+      <!-- KeyBindings List -->
+<!--      <ul class="divide-y rounded-full divide-neutral-500">-->
+<!--        <li *ngFor="let keyBinding of currentPage().keyBindings; trackBy: trackByElement"-->
+<!--            @fade-->
+<!--            class="flex justify-between items-center gap-4 px-1 py-3 font-light">-->
+
+<!--              <span class="text-ellipsis overflow-hidden whitespace-nowrap text-neutral-300">-->
+<!--                {{ keyBinding.label }}-->
+<!--              </span>-->
+
+<!--          <span class="whitespace-nowrap bg-neutral-500 font-mono rounded px-2 py-1">-->
+<!--                {{ keyBinding.key | symbolizeKey }}-->
+<!--              </span>-->
+<!--        </li>-->
+<!--      </ul>-->
+
+
+    </div>
+  } @else {
+    <!-- Empty-Placeholder -->
+    <p @fade
+       class="font-light italic text-neutral-300"
+       data-test="empty-message">
+      No key-bindings
+    </p>
+  }
+
+  <!-- PAGINATOR -->
+
+  <div class="absolute bottom-2 left-0 w-full flex gap-1 justify-center">
+    @for (page of totalPages() | numberIterator; track page) {
+      <div class="rounded-full h-2 w-2 bg-neutral-500"
+           [ngClass]="{'!bg-neutral-300': page === currentPageIndex()}"></div>
+    }
+  </div>
+
+
+  <!--  <ng-container *ngIf="overlayService.activeKeyBindings() as groups">-->
+
+  <!--    <ng-container *ngFor="let group of groups | keyvalue : groupsSort ; trackBy: trackByKey">-->
+
+  <!--      &lt;!&ndash; Action/KeyBinding Group &ndash;&gt;-->
+  <!--      <div *ngIf="group.value.length > 0"-->
+  <!--           class="flex flex-col min-w-[250px] whitespace-nowrap text-ellipsis overflow-hidden">-->
+
+  <!--        &lt;!&ndash; Group-Name &ndash;&gt;-->
+  <!--        <p @fade-->
+  <!--           class="font-bold text-xl mb-1"-->
+  <!--           data-test="group-name">-->
+  <!--          {{ group.key }}-->
+  <!--        </p>-->
+
+  <!--        &lt;!&ndash; KeyBindings List &ndash;&gt;-->
+  <!--        <ul class="divide-y rounded-full divide-neutral-500">-->
+  <!--          <li *ngFor="let keyBinding of group.value; trackBy: trackByElement"-->
+  <!--              @fade-->
+  <!--              class="flex justify-between items-center gap-4 px-1 py-3 font-light">-->
+
+  <!--            <span class="text-ellipsis overflow-hidden whitespace-nowrap text-neutral-300">-->
+  <!--              {{ keyBinding.label }}-->
+  <!--            </span>-->
+
+  <!--            <span class="whitespace-nowrap bg-neutral-500 font-mono rounded px-2 py-1">-->
+  <!--              {{ keyBinding.key | symbolizeKey }}-->
+  <!--            </span>-->
+
+  <!--          </li>-->
+  <!--        </ul>-->
+
+  <!--      </div>-->
+
+  <!--    </ng-container>-->
+
+  <!--    &lt;!&ndash; Placeholder &ndash;&gt;-->
+
+  <!--    <ng-container *ngIf="isEmpty(groups)">-->
+  <!--      <p @fade-->
+  <!--         class="font-light italic text-neutral-300"-->
+  <!--         data-test="empty-message">-->
+  <!--        No key-bindings-->
+  <!--      </p>-->
+  <!--    </ng-container>-->
+
+  <!--  </ng-container>-->
 
 </div>
