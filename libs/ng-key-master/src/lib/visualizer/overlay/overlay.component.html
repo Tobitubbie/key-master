@@ -1,7 +1,48 @@
+<!-- NEW -->
+<!--@if (overlayService.isOpen()) {-->
+
+<!--  <div class="flex bg-yellow-500">-->
+
+<!--  @for (group of overlayService.activeKeyBindings() | keyvalue : groupsSort ; track group) {-->
+<!--    <div class="grid grid-rows-{{gridConfig.maxRows}} grid-flow-col gap-2">-->
+<!--      <p class="col-start-1 col-span-{{group.value.length}}">{{group.key}}</p>-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+
+
+<!--      <p class="row-start-1 col-span-3">{{group.key}}</p>-->
+<!--      @for(keybinding of group.value; track keybinding) {-->
+<!--        <div>{{ keybinding.label }}</div>-->
+<!--      }-->
+
+<!--    </div>-->
+<!--  }-->
+
+<!--  </div>-->
+
+<!--  <div class="grid">-->
+<!--    &lt;!&ndash; Grid Header / Container Name &ndash;&gt;-->
+<!--    <div *ngFor="let group of overlayService.activeKeyBindings() | keyvalue : groupsSort ; trackBy: trackByKey" class="test-group">-->
+<!--      <p>{{ group.key }}</p>-->
+<!--      <ul>-->
+<!--        <li *ngFor="let keybinding of group.value">{{ keybinding.label }}</li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--}-->
+
+
 <!-- Overlay-Container -->
 <div *ngIf="overlayService.isOpen()"
      @zoom
-     class="flex gap-8 shadow-lg bg-neutral-800/80 p-4 rounded-xl backdrop-blur-md text-neutral-300">
+     class="flex gap-8 shadow-lg bg-neutral-800/80 p-6 rounded-xl backdrop-blur-md text-white">
 
   <ng-container *ngIf="overlayService.activeKeyBindings() as groups">
 
@@ -24,11 +65,11 @@
               @fade
               class="flex justify-between items-center gap-4 px-1 py-3 font-light">
 
-            <span class="text-ellipsis overflow-hidden whitespace-nowrap">
+            <span class="text-ellipsis overflow-hidden whitespace-nowrap text-neutral-300">
               {{ keyBinding.label }}
             </span>
 
-            <span class="whitespace-nowrap bg-neutral-500 text-neutral-200 font-mono rounded px-2 py-1">
+            <span class="whitespace-nowrap bg-neutral-500 font-mono rounded px-2 py-1">
               {{ keyBinding.key | symbolizeKey }}
             </span>
 
@@ -39,14 +80,24 @@
 
     </ng-container>
 
+    <!-- Placeholder -->
+
     <ng-container *ngIf="isEmpty(groups)">
       <p @fade
-         class="font-light italic"
+         class="font-light italic text-neutral-300"
          data-test="empty-message">
         No key-bindings
       </p>
     </ng-container>
 
   </ng-container>
+
+  <!-- PAGINATOR -->
+
+  <div class="absolute bottom-2 left-0 w-full flex gap-1 justify-center">
+    @for (page of totalPages | numberIterator; track page) {
+      <div class="rounded-full h-2 w-2 bg-neutral-500" [ngClass]="{'!bg-neutral-300': page === currentPage}"></div>
+    }
+  </div>
 
 </div>

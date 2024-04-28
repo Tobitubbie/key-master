@@ -14,10 +14,4 @@ export type KeyBinding = Shortcut & (
 
 export type IgnoreTarget = typeof Element;
 
-export type GlobalContainerConfig = {
-  name: string,
-  ignoreTargets: IgnoreTarget[],
-  element: Element,
-}
-
 export type ActiveElement = Element | null;

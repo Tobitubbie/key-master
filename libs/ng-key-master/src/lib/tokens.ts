@@ -1,9 +1,10 @@
 import {inject, InjectionToken, Signal} from "@angular/core";
-import {ActiveElement, GlobalContainerConfig, IgnoreTarget} from "./models";
+import {ActiveElement, IgnoreTarget} from "./models";
 import {DOCUMENT} from "@angular/common";
 import {fromEvent, merge} from "rxjs";
 import {debounceTime, map} from "rxjs/operators";
 import {toSignal} from "@angular/core/rxjs-interop";
+import {GlobalContainerConfig} from './providers';
 import {Strategy} from "./strategies/strategy";
 import {VisualizationStrategy} from "./visualizer/strategies/visualization-strategy";
 
