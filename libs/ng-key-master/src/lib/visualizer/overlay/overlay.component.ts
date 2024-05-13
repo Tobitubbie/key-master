@@ -1,48 +1,23 @@
-import { Component, computed, effect, inject, model, OnInit, signal, TrackByFunction } from '@angular/core';
 import {transition, trigger, useAnimation} from '@angular/animations';
-import {VisualizationService} from '../visualization.service';
+import {AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  model,
+  Renderer2,
+  signal,
+  untracked,
+  viewChildren
+} from '@angular/core';
+import {SymbolizeKeyPipe} from "../../keycode/symbolizeKey.pipe";
 import {KeyBinding} from '../../models';
 import {fadeIn, zoomIn, zoomOut} from '../animations';
-import { AsyncPipe, JsonPipe, KeyValue, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import {SymbolizeKeyPipe} from "../../keycode/symbolizeKey.pipe";
+import {VisualizationService} from '../visualization.service';
 import {NumberIteratorPipe} from './number-iterator.pipe';
 
-/*
-* ---
-* data:
-*
-* container
-*   - page1 [ keybindings... ]  -> #1
-* container-2
-*   - page2 [ ...]              -> #2
-*   - page3 [ ... ]             -> #3
-*
-* -> oder
-* page1 -> container
-* page2 -> container-2
-* page3 -> container-2
-*
-* ---
-* ui:
-*
-* totalPages = get page-count of containers
-*
-* ---
-* pagedKeyBindings
-* example:
-*   currentPage = 2
-*   gridConfig.maxRows = 3
-*   gridConfig.maxCols = 3
-*   => itemsPerPage = rows * cols
-*   => totalPages = foreach container { keybindings.length / itemsPerPage }
-*   => pages = [ { keybindings, container } ]
-*
-*   // c1: [ 4x keybinding ]
-*   // c2: [ 2x keybinding ]
-*
-*   //
-*
-* */
 
 type Page = {
   keyBindings: KeyBinding[];
@@ -54,7 +29,7 @@ type Page = {
   templateUrl: 'overlay.component.html',
   styleUrls: ['overlay.component.scss'],
   standalone: true,
-  imports: [NgForOf, KeyValuePipe, AsyncPipe, NgIf, SymbolizeKeyPipe, NumberIteratorPipe, NgClass, JsonPipe],
+  imports: [NgForOf, KeyValuePipe, AsyncPipe, NgIf, SymbolizeKeyPipe, NumberIteratorPipe, NgClass, JsonPipe, NgStyle],
   animations: [
     trigger('zoom', [
       transition(':enter', useAnimation(zoomIn)),
@@ -65,54 +40,85 @@ type Page = {
 })
 export class OverlayComponent {
 
+
+  readonly renderer2 = inject(Renderer2)
   readonly overlayService = inject(VisualizationService);
 
+  pageIndicators = viewChildren<ElementRef>('pageIndicator');
+
   gridConfig = model({
-    maxRows: 2, // TODO: apply grid-class "grid-rows-{{value}}" -> tailwind does not recognize dynamic value
-    maxCols: 1, // TODO: apply grid-class "grid-cols-{{value}}" -> tailwind does not recognize dynamic value
+    rows: 3,
+    cols: 3,
   });
+
+  gridStyles = computed(() => ({
+    'grid-template-rows': `repeat(${this.gridConfig().rows}, minmax(0, 1fr))`,
+  }));
 
   currentPageIndex = signal(0);
   currentPage = computed(() => this.pages()[this.currentPageIndex()]);
-  itemsPerPage = computed(() => this.gridConfig().maxCols * this.gridConfig().maxRows);
 
+  pagesPerContainer = computed(() =>
+    this.pages().reduce((acc, page) => {
+      acc[page.containerName] = acc[page.containerName] || 0;
+      acc[page.containerName]++;
+      return acc;
+    }, <Record<string, number>>{})
+  );
+
+  itemsPerPage = computed(() => this.gridConfig().cols * this.gridConfig().rows);
   totalPages = computed(() => this.pages().length);
-  containers = computed(() => this.pages())
   pages = computed<Page[]>(() => {
-    const keyBindings = this.overlayService.activeKeyBindings();
+    const activeKeyBindings = this.overlayService.activeKeyBindings();
+    const itemsPerPage = this.itemsPerPage();
     const pages = <Page[]>[];
 
-    keyBindings.forEach((keyBindings, containerName) => {
-      const totalContainerPages = Math.ceil(keyBindings.length / this.itemsPerPage());
+    for (const [containerName, keyBindings] of activeKeyBindings.entries()) {
+      const totalContainerPages = Math.ceil(keyBindings.length / itemsPerPage);
       for (let i = 0; i < totalContainerPages; i++) {
-        const start = i * this.itemsPerPage();
-        const end = start + this.itemsPerPage();
+        const start = i * itemsPerPage;
+        const end = start + itemsPerPage;
         // TODO: use native toSlice
         const pagedKeyBindings = [...keyBindings].slice(start, end);
 
-        pages.push({ keyBindings: pagedKeyBindings, containerName });
+        pages.push({keyBindings: pagedKeyBindings, containerName});
       }
-    });
+    }
 
     return pages;
   });
 
-  // TODO: Bug: page-index gets "lost" when selected container goes inactive
-  resetOnPageChange = effect(() => {
-    const _pages = this.pages();
-    this.currentPageIndex.set(0);
-  });
+  constructor() {
+    // restore currentPageIndex on pages change
+    effect(() => {
+      const pages = this.pages();
+      const currentPageIndex = untracked(this.currentPageIndex);
 
-  trackByKey: TrackByFunction<KeyValue<string, KeyBinding[]>> = (_, x) =>
-    x.key;
-  trackByElement: TrackByFunction<KeyBinding> = (_, keyBinding) =>
-    keyBinding.element;
+      if (currentPageIndex > pages.length - 1) {
+        this.currentPageIndex.set(Math.max(0, pages.length - 1));
+      }
+    }, {allowSignalWrites: true});
 
-  // KeyValue pipe orders by map-key, by returning 1 the order is kept as is
-  groupsSort = (
-    _a: KeyValue<string, KeyBinding[]>,
-    _b: KeyValue<string, KeyBinding[]>
-  ): number => 1;
+    // highlight current page indicator
+    effect(() => {
+      const currentIndex = this.currentPageIndex();
+      this.pageIndicators().forEach((indicator, index) => {
+        currentIndex === index
+          ? this.renderer2.addClass(indicator.nativeElement, 'bg-neutral-300')
+          : this.renderer2.removeClass(indicator.nativeElement, 'bg-neutral-300');
+      });
+    });
+
+    // scroll current page into view
+    effect(() => {
+      const currentIndex = this.currentPageIndex();
+      this.pageIndicators()[currentIndex].nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    });
+  }
 
   isEmpty(groups: Map<string, KeyBinding[]>) {
     return Array.from(groups.values()).flat().length === 0
@@ -123,6 +129,6 @@ export class OverlayComponent {
   }
 
   previousPage() {
-    this.currentPageIndex.update(currentPage => Math.max(currentPage - 1, 0));
+    this.currentPageIndex.update(currentPage => Math.max(0, currentPage - 1));
   }
 }

@@ -26,7 +26,7 @@ describe('Container', () => {
   it('should create an instance with defaults', () => {
     expect(container).toBeDefined();
     expect(container.ignoreTargets).toEqual([]);
-    expect(container.name).toBeUndefined();
+    expect(container.name).toBe("Others");
     expect(container.element).toBeUndefined();
     expect(container.strategy).toBeInstanceOf(NoopStrategy);
   });
