@@ -15,7 +15,7 @@
 
               <!-- Group-Name -->
               <p class="whitespace-nowrap font-bold text-xl"
-                 [class.text-neutral-500]="containerName !== currentPage().containerName"
+                 [class.text-neutral-500]="containerName !== currentPage()?.containerName"
                  data-test="group-name">
                 {{ containerName }}
               </p>
@@ -39,7 +39,7 @@
       <div class="grid grid-flow-col gap-4"
            [ngStyle]="gridStyles()">
 
-        @for (keyBinding of currentPage().keyBindings; track keyBinding) {
+        @for (keyBinding of currentPage()?.keyBindings; track keyBinding) {
           <div @fade
                class="flex justify-between items-center gap-4 font-light overflow-hidden">
 

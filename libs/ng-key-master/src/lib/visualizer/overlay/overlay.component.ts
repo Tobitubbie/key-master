@@ -56,7 +56,7 @@ export class OverlayComponent {
   }));
 
   currentPageIndex = signal(0);
-  currentPage = computed(() => this.pages()[this.currentPageIndex()]);
+  currentPage = computed<Page | undefined>(() => this.pages()[this.currentPageIndex()]);
 
   pagesPerContainer = computed(() =>
     this.pages().reduce((acc, page) => {
@@ -112,7 +112,7 @@ export class OverlayComponent {
     // scroll current page into view
     effect(() => {
       const currentIndex = this.currentPageIndex();
-      this.pageIndicators()[currentIndex].nativeElement.scrollIntoView({
+      this.pageIndicators()[currentIndex]?.nativeElement.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
         inline: 'center'
