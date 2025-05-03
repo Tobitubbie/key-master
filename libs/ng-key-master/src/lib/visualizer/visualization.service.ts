@@ -1,6 +1,6 @@
 import {GlobalPositionStrategy, Overlay} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
-import {computed, effect, inject, Injectable, signal} from '@angular/core';
+import {ComponentRef, computed, effect, inject, Injectable, signal} from '@angular/core';
 import {KeyMasterService} from '../key-master.service';
 import {KeyBinding} from '../models';
 import {groupKeyBindingsByContainer} from '../utils';
@@ -18,6 +18,7 @@ export class VisualizationService {
   #isOpen = signal(false);
   isOpen = this.#isOpen.asReadonly();
 
+  #componentRef: ComponentRef<OverlayComponent> | undefined;
   #globalPortal = new ComponentPortal(OverlayComponent);
   #globalOverlayHost = inject(Overlay).create({
     maxWidth: '90vw',
@@ -45,7 +46,7 @@ export class VisualizationService {
   showOverlay(): void {
     if (!this.#isOpen()) {
       if (!this.#globalPortal.isAttached) {
-        this.#globalPortal.attach(this.#globalOverlayHost);
+        this.#componentRef = this.#globalPortal.attach(this.#globalOverlayHost);
       }
       this.#strategies.forEach((strategy) => strategy.show());
     }
@@ -58,6 +59,9 @@ export class VisualizationService {
     }
     this.#isOpen.set(false);
   }
+
+  nextPage= () => this.#componentRef?.instance.nextPage();
+  previousPage = () => this.#componentRef?.instance.previousPage();
 
   toggleOverlay(): void {
     this.#isOpen() ? this.hideOverlay() : this.showOverlay();

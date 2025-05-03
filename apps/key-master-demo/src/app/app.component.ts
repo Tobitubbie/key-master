@@ -59,15 +59,29 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const key: KeyBinding = {
-      key: 'F2',
-      label: 'Hilfe anzeigen/ausblenden',
-      action: () => this.overlayService.toggleOverlay(),
-    };
-    this.keyMasterService.globalContainer.addKeyBinding(key);
-    this.globalKeyBindings.push(key);
+    [
+      {
+        key: 'F2',
+        label: 'Hilfe anzeigen/ausblenden',
+        action: () => this.overlayService.toggleOverlay(),
+      },
+      {
+        key: 'ctrl + option + right',
+        label: 'Nächste Hilfeseite',
+        action: () => this.overlayService.nextPage(),
+      },
+      {
+        key: 'ctrl + option + left',
+        label: 'Vorherige Hilfeseite',
+        action: () => this.overlayService.previousPage(),
+      },
+    ].forEach(key => {
+      this.keyMasterService.globalContainer.addKeyBinding(key);
+      this.globalKeyBindings.push(key);
+    })
 
     this.announcerService.enable();
+    this.overlayService.showOverlay();
   }
 
   getDummyAction(key: string): void {
