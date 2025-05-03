@@ -93,19 +93,31 @@ export class OverlayComponent {
     effect(() => {
       const pages = this.pages();
       const currentPageIndex = untracked(this.currentPageIndex);
+      const currentPage = untracked(this.currentPage);
 
+      // reset on out-of-bounds
       if (currentPageIndex > pages.length - 1) {
         this.currentPageIndex.set(Math.max(0, pages.length - 1));
       }
+
+      // select closest container (^= container of last page), if not already selected
+      const closestContainerName: string | undefined = pages[pages.length -1]?.containerName;
+      if (closestContainerName && currentPage?.containerName !== closestContainerName) {
+        const closestContainerIndex = pages.findIndex(page => page.containerName === closestContainerName);
+        this.currentPageIndex.set(closestContainerIndex);
+      }
+
+
     }, {allowSignalWrites: true});
 
     // highlight current page indicator
     effect(() => {
       const currentIndex = this.currentPageIndex();
+      const highlightClass = '!bg-neutral-300';
       this.pageIndicators().forEach((indicator, index) => {
         currentIndex === index
-          ? this.renderer2.addClass(indicator.nativeElement, 'bg-neutral-300')
-          : this.renderer2.removeClass(indicator.nativeElement, 'bg-neutral-300');
+          ? this.renderer2.addClass(indicator.nativeElement, highlightClass)
+          : this.renderer2.removeClass(indicator.nativeElement, highlightClass);
       });
     });
 
