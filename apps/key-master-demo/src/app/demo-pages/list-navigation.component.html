@@ -1,0 +1,47 @@
+<p>list-navigation works!</p>
+
+<!-- centering -->
+<div class="flex justify-center">
+
+  <ul class="space-y-10 py-20 px-40
+  bg-cyan-500 rounded
+  text-white font-bold">
+
+    <li>
+      <button class="w-full py-10 px-20 rounded
+       focus:bg-neutral-500/20 hover:bg-neutral-500/20 active:bg-neutral-500/40
+        text-left" (click)="test()">Listelement #A
+      </button>
+    </li>
+
+    <!-- Listelement -->
+    <li>
+      <button class="w-full py-10 px-20 rounded
+       focus:bg-neutral-500/20 hover:bg-neutral-500/20 active:bg-neutral-500/40
+        text-left" (click)="test()">Listelement #B
+      </button>
+    </li>
+
+    <li>
+      <!-- Listelement with Actions -->
+      <div tabindex="0"
+           class="group
+                  flex gap-40 items-center py-10 px-20 rounded
+                  focus-within:bg-neutral-500/20 hover:bg-neutral-500/20">
+
+        <!-- Title -->
+        <p class="group-focus-within:underline group-hover:underline underline-offset-8">Action-Element #1</p>
+
+        <!-- Actions -->
+        <div class="flex space-x-5">
+          <button class="w-10 h-10 rounded focus:bg-red-500/80 hover:bg-red-500/80 active:bg-red-500">X</button>
+          <button class="w-10 h-10 rounded focus:bg-yellow-500/80 hover:bg-yellow-500/80 active:bg-yellow-500">Y
+          </button>
+          <button class="w-10 h-10 rounded focus:bg-green-500/80 hover:bg-green-500/80 active:bg-green-500">Z</button>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+
+</div>
