@@ -2,7 +2,7 @@ import {Directive, ElementRef, inject, Input, OnDestroy, OnInit,} from '@angular
 import {DEFAULT_VISUALIZATION_STRATEGY} from "./tokens";
 import {KeyMasterService} from "./key-master.service";
 import {Container} from "./container";
-import {KeyBinding} from "./models";
+import {KeyBinding, Shortcut} from "./models";
 import {VisualizationStrategy} from "./visualizer/strategies/visualization-strategy";
 
 
@@ -13,13 +13,12 @@ import {VisualizationStrategy} from "./visualizer/strategies/visualization-strat
 export class MultiKeyBindingsDirective implements OnInit, OnDestroy {
 
   @Input({required: true, alias: 'kmMultiKeyBindings'})
-  shortcuts: Array<{
-    key: string,
-    action: VoidFunction,
-    label?: string,
+  shortcuts: Array<Shortcut & {
     strategy?: VisualizationStrategy,
-    multi?: boolean
   }> = [];
+
+  @Input()
+  multiStrategy: VisualizationStrategy | undefined;
 
   #defaultStrategy = inject(DEFAULT_VISUALIZATION_STRATEGY);
 
@@ -46,7 +45,7 @@ export class MultiKeyBindingsDirective implements OnInit, OnDestroy {
         action,
         label,
         multi,
-        strategy: strategy ?? this.#defaultStrategy(),
+        strategy: strategy ?? this.multiStrategy ?? this.#defaultStrategy(),
         element: this.elementRef.nativeElement,
       });
     });
