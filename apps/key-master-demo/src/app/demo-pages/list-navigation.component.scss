@@ -1,0 +1,13 @@
+
+li {
+
+  @apply cursor-pointer select-none;
+
+  &[aria-selected="true"] {
+    @apply bg-cyan-500;
+  }
+}
+
+ul:focus li.focused {
+  @apply outline;
+}
