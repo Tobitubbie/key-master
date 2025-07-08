@@ -1,7 +1,7 @@
 
 <h1 class="text-xl">Item-List</h1>
 
-<div class="m-3" kmKeysContainer name="Item-List" [ignoreTargets]="[]">
+<div class="m-3" kmKeysContainer="Item-List" [ignoreTargets]="[]">
 
   <input type="checkbox" id="allCheckbox" [checked]="areAllSelected()" (change)="toggleAll()" kmKeyBinding key="a" (action)="toggleAll()" label="Toggle All" />
   <label for="allCheckbox">Toggle All</label>

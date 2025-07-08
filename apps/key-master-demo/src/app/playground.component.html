@@ -25,7 +25,7 @@
 
   <hr>
 
-  <div kmKeysContainer name="Empty Container" [strategy]="strategyOptions.exclusive()">
+  <div kmKeysContainer="Empty Container" [strategy]="strategyOptions.exclusive()">
     <div kmKeysContainer [strategy]="strategyOptions.bubble()">
       <button>What about empty exclusive Containers O.o</button>
     </div>
@@ -38,17 +38,17 @@
   </div>
 
   <div>
-    <div kmKeysContainer name="Duplicate Name">
+    <div kmKeysContainer="Duplicate Name">
       <p kmKeyBinding key="g" (action)="getDummyAction('g')" label="DummyLabel_G" tabindex="0">
         Duplicate Container Name #1
       </p>
     </div>
-    <div kmKeysContainer name="Duplicate Name">
+    <div kmKeysContainer="Duplicate Name">
       <p kmKeyBinding key="f" (action)="getDummyAction('f')" label="DummyLabel_F" tabindex="0">
         Duplicate Container Name #2
       </p>
 
-      <div kmKeysContainer name="Duplicate Name" [strategy]="strategyOptions.bubble()">
+      <div kmKeysContainer="Duplicate Name" [strategy]="strategyOptions.bubble()">
         <p kmKeyBinding key="h" (action)="getDummyAction('h')" label="DummyLabel_H" tabindex="0">
           Nested Duplicate Container Name #2
         </p>
@@ -60,7 +60,7 @@
     <div kmKeyBinding key="b" (action)="getDummyAction('b')" label="DummyLabel_B">
       <button>New Area</button>
 
-      <div class="border border-amber-500" kmKeysContainer name="Nested Area" [strategy]="strategyOptions.bubble()">
+      <div class="border border-amber-500" kmKeysContainer="Nested Area" [strategy]="strategyOptions.bubble()">
         <button>Nested Area</button>
         <div kmKeyBinding key="a" (action)="getDummyAction('a')" label="DummyLabel_A">
           <div>
@@ -70,16 +70,16 @@
               <button kmKeyBinding key="c" (action)="getDummyAction('c')" label="DummyLabel_C">C-KeyBinding-Button
               </button>
 
-              <div kmKeysContainer name="Nested Area 2" [strategy]="strategyOptions.bubble()">
+              <div kmKeysContainer="Nested Area 2" [strategy]="strategyOptions.bubble()">
                 <p tabindex="0">Nested Area 2</p>
                 <div kmKeyBinding key="y" (action)="getDummyAction('y')" label="DummyLabel_Y"></div>
-                <div kmKeysContainer name="Nested Area 3" [strategy]="strategyOptions.bubble()">
+                <div kmKeysContainer="Nested Area 3" [strategy]="strategyOptions.bubble()">
                   <p tabindex="0">Nested Area 3</p>
                   <div kmKeyBinding key="y" (action)="getDummyAction('y')" label="DummyLabel_Y"></div>
-                  <div kmKeysContainer name="Nested Area 4" [strategy]="strategyOptions.bubble()">
+                  <div kmKeysContainer="Nested Area 4" [strategy]="strategyOptions.bubble()">
                     <p tabindex="0">Nested Area 4</p>
                     <div kmKeyBinding key="y" (action)="getDummyAction('y')" label="DummyLabel_Y"></div>
-                    <div kmKeysContainer name="Nested Area 5" [strategy]="strategyOptions.bubble()">
+                    <div kmKeysContainer="Nested Area 5" [strategy]="strategyOptions.bubble()">
                       <p tabindex="0">Nested Area 5</p>
                       <div kmKeyBinding key="y" (action)="getDummyAction('y')" label="DummyLabel_Y"></div>
                     </div>
@@ -114,7 +114,7 @@
     <button>BAR</button>
   </div>
 
-  <div class="bg-amber-500" kmKeysContainer name="List-Navigation">
+  <div class="bg-amber-500" kmKeysContainer="List-Navigation">
     Bereicht C
 
     <ul>
