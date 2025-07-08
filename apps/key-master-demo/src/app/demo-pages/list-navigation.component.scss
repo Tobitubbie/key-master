@@ -1,13 +1,13 @@
-
+// a11y: visualize internal focus
+ul:focus li.focused {
+  @apply outline;
+}
 li[aria-selected="true"] {
   @apply bg-cyan-500/50;
 }
 
 // Outline
-ul:focus {
+*:focus {
   @apply outline outline-offset-4 outline-gray-500/50;
-}
-ul:focus li.focused {
-  @apply outline;
 }
 
