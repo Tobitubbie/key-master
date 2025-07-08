@@ -20,7 +20,7 @@ export class KeyBindingsContainerDirective extends Container implements OnInit, 
   @Input()
   override strategy: Strategy = inject(DEFAULT_CONTAINER_STRATEGY)();
 
-  @Input()
+  @Input({required: true, alias: 'kmKeysContainer'})
   override name: string = inject(DEFAULT_CONTAINER_NAME);
 
   override element = this.elementRef.nativeElement;
