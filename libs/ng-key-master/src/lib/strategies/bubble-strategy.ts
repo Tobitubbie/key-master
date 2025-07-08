@@ -14,6 +14,7 @@ export class BubbleStrategy implements Strategy {
   handleKeyBoardEvent(event: KeyboardEvent, handled: boolean) {
     if (handled) {
       event.stopPropagation();
+      event.preventDefault();
     }
   }
 

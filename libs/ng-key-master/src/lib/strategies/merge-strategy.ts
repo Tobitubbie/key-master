@@ -16,6 +16,10 @@ export class MergeStrategy implements Strategy {
       this.keyMasterService.globalContainer.onKeyboardEvent(event);
     }
     event.stopPropagation();
+
+    if (handled) {
+      event.preventDefault();
+    }
   }
 
   discoverParentContainers(_element: Element | null | undefined): Container[] {

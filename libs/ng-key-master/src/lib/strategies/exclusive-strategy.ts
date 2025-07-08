@@ -7,8 +7,12 @@ import {Strategy} from "./strategy";
  * Stops propagation of the keyboard event regardless of whether it got handled.
  */
 export class ExclusiveStrategy implements Strategy {
-  handleKeyBoardEvent(event: KeyboardEvent, _handled: boolean) {
+  handleKeyBoardEvent(event: KeyboardEvent, handled: boolean) {
     event.stopPropagation();
+
+    if (handled) {
+      event.preventDefault();
+    }
   }
 
   discoverParentContainers(_element: Element | null | undefined): Container[] {
