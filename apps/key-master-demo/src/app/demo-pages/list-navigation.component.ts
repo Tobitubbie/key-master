@@ -1,6 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {Component, inject, OnInit} from '@angular/core';
 import {
+  KeyBindingDirective,
   KeyBindingsContainerDirective,
   KeyMasterService,
   MultiKeyBindingsDirective, StrategyOptions,
@@ -10,7 +11,7 @@ import {
 @Component({
   selector: 'key-master-list-navigation',
   standalone: true,
-  imports: [CommonModule, KeyBindingsContainerDirective, MultiKeyBindingsDirective],
+  imports: [CommonModule, KeyBindingsContainerDirective, MultiKeyBindingsDirective, KeyBindingDirective],
   templateUrl: './list-navigation.component.html',
   styleUrl: './list-navigation.component.scss',
 })
@@ -45,6 +46,15 @@ export class ListNavigationComponent implements OnInit {
     },
   ];
 
+  ngOnInit() {
+    this.keyMasterService.globalContainer.addKeyBinding({
+      key: 'F2',
+      label: 'Hilfe anzeigen/ausblenden',
+      action: () => this.visualizationService.toggleOverlay(),
+    })
+  }
+
+  // Cursor-Movement
   toggle() {
     this.planets[this.cursor].selected = !this.planets[this.cursor].selected;
   }
@@ -55,12 +65,14 @@ export class ListNavigationComponent implements OnInit {
     this.cursor-1 < 0 ? this.cursor = 0 : this.cursor--;
   }
 
-  ngOnInit() {
-
-    this.keyMasterService.globalContainer.addKeyBinding({
-      key: 'F2',
-      label: 'Hilfe anzeigen/ausblenden',
-      action: () => this.visualizationService.toggleOverlay(),
-    })
+  // List-Actions
+  saveList() {
+    const selectedPlanets = this.planets.filter(planet => planet.selected);
+    console.log("Saving selected Planets:", selectedPlanets);
   }
+  resetList() {
+    this.planets.forEach(planet => planet.selected = false);
+    this.cursor = 0;
+  }
+
 }

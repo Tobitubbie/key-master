@@ -29,9 +29,16 @@
         <p>Cursor-Index: {{cursor}}</p>
     </code>
 
-    <div class="my-2 space-x-4">
-        <button class="p-2 bg-green-200 rounded">Save</button>
-        <button class="p-2 bg-red-200 rounded">Reset</button>
+    <div class="my-2 space-x-4"
+         kmKeysContainer="List-Controls" [strategy]="strategyOptions.bubble()">
+        <button class="p-2 bg-green-200 rounded"
+                kmKeyBinding key="ctrl + S" (action)="saveList()" (click)="saveList()">
+            Save
+        </button>
+        <button class="p-2 bg-red-200 rounded"
+                kmKeyBinding key="ctrl + R" (action)="resetList()" (click)="resetList()">
+            Reset
+        </button>
     </div>
 
 </div>
