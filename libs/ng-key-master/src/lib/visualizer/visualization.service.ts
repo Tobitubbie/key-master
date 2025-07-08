@@ -68,13 +68,11 @@ export class VisualizationService {
   }
 
   refreshVisualizations(activeKeyBindings: KeyBinding[]): void {
-    this.#strategies.forEach(s => {
-      if (!activeKeyBindings.some(kb => kb.strategy === s)) {
-        s.destroy()
-      }
-    });
+    // Destroy visualizations + Reset internal state
+    this.#strategies.forEach(s => s.destroy());
     this.#strategies.clear();
 
+    // Recreate visualizations
     activeKeyBindings
       .forEach(kb => {
         const strategy = kb.strategy;

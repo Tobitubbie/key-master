@@ -22,11 +22,6 @@ export class InlineVisualizationStrategy implements VisualizationStrategy {
   }
 
   create(keyBinding: KeyBinding) {
-    if (this.keyBindings.some(kb => kb === keyBinding)) {
-      // NOOP - keyBinding is already visualized
-      return;
-    }
-
     // Memorize keyBinding
     this.keyBindings.push(keyBinding);
 
@@ -37,7 +32,11 @@ export class InlineVisualizationStrategy implements VisualizationStrategy {
   }
 
   destroy() {
-    this.keyBindings = [];
+    // Remove from DOM
     this.renderer.removeChild(this.element.parentElement, this.element);
+
+    // Reset internal state
+    this.keyBindings = [];
+    this.element = this.renderer.createElement('span');
   }
 }
