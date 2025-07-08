@@ -8,6 +8,7 @@ import {symbolizeKeycode} from "../../keycode/symbolizeKey.pipe";
  */
 export class InlineVisualizationStrategy implements VisualizationStrategy {
   element: HTMLSpanElement = this.renderer.createElement('span');
+  keyBindings = <Array<KeyBinding>>[];
 
   constructor(private readonly renderer: Renderer2) {
   }
@@ -21,12 +22,22 @@ export class InlineVisualizationStrategy implements VisualizationStrategy {
   }
 
   create(keyBinding: KeyBinding) {
+    if (this.keyBindings.some(kb => kb === keyBinding)) {
+      // NOOP - keyBinding is already visualized
+      return;
+    }
+
+    // Memorize keyBinding
+    this.keyBindings.push(keyBinding);
+
+    // Visualize keybinding
     const transformedKey = symbolizeKeycode(keyBinding.key);
-    this.element.textContent = ` (${transformedKey})`;
+    this.element.textContent += ` (${transformedKey})`;
     this.renderer.appendChild(keyBinding.element, this.element);
   }
 
   destroy() {
+    this.keyBindings = [];
     this.renderer.removeChild(this.element.parentElement, this.element);
   }
 }
