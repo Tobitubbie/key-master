@@ -18,7 +18,6 @@ import {
 export class ListNavigationComponent implements OnInit {
 
   keyMasterService = inject(KeyMasterService);
-  strategyOptions = inject(StrategyOptions);
   visualizationService = inject(VisualizationService);
   visualizationStrategyOptions = inject(VisualizationStrategyOptions);
 
@@ -51,7 +50,17 @@ export class ListNavigationComponent implements OnInit {
       key: 'F2',
       label: 'Hilfe anzeigen/ausblenden',
       action: () => this.visualizationService.toggleOverlay(),
-    })
+    });
+    this.keyMasterService.globalContainer.addKeyBinding({
+      key: 'ctrl + option + right',
+      label: 'Nächste Hilfeseite',
+      action: () => this.visualizationService.nextPage(),
+    });
+    this.keyMasterService.globalContainer.addKeyBinding({
+      key: 'ctrl + option + left',
+      label: 'Vorherige Hilfeseite',
+      action: () => this.visualizationService.previousPage(),
+    });
   }
 
   // Cursor-Movement
@@ -66,11 +75,11 @@ export class ListNavigationComponent implements OnInit {
   }
 
   // List-Actions
-  saveList() {
+  saveSelection() {
     const selectedPlanets = this.planets.filter(planet => planet.selected);
     console.log("Saving selected Planets:", selectedPlanets);
   }
-  resetList() {
+  resetSelection() {
     this.planets.forEach(planet => planet.selected = false);
     this.cursor = 0;
   }

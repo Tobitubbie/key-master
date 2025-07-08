@@ -1,5 +1,6 @@
 // a11y: visualize internal focus
-ul:focus li.focused {
+// outline = cursor -> visualize as long as container has focus
+[kmKeysContainer="List"]:focus-within li.focused {
   @apply outline;
 }
 li[aria-selected="true"] {

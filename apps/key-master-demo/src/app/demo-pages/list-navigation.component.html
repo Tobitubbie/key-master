@@ -1,27 +1,25 @@
 <p>list-navigation works!</p>
 
 <!-- centering -->
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center" kmKeysContainer="List">
 
     <h1 class="text-4xl m-4" id="list-label">Liste der Planeten in unserem Sonnensystem</h1>
 
-    <div kmKeysContainer="List-Navigation" [strategy]="strategyOptions.bubble() ">
-        <ul role="listbox" tabindex="0" aria-labelledby="list-label"
-            [kmMultiKeyBindings]="listKeyMap"
-            [multiStrategy]="visualizationStrategyOptions.inline()">
+    <ul role="listbox" tabindex="0" aria-labelledby="list-label"
+        [kmMultiKeyBindings]="listKeyMap"
+        [multiStrategy]="visualizationStrategyOptions.inline()">
 
-            @for (planet of planets; track planet; let i = $index) {
-                <li class="w-96 text-center p-4 cursor-pointer select-none"
-                    role="option"
-                    [attr.id]="'planet-'+i"
-                    [class.focused]="cursor === i"
-                    [attr.aria-selected]="planet.selected" (click)="cursor = i; planet.selected = !planet.selected">
-                    {{ planet.label }}
-                </li>
-            }
+        @for (planet of planets; track planet; let i = $index) {
+            <li class="w-96 text-center p-4 cursor-pointer select-none"
+                role="option"
+                [attr.id]="'planet-'+i"
+                [class.focused]="cursor === i"
+                [attr.aria-selected]="planet.selected" (click)="cursor = i; planet.selected = !planet.selected">
+                {{ planet.label }}
+            </li>
+        }
 
-        </ul>
-    </div>
+    </ul>
 
     <hr class="w-1/2 my-2">
 
@@ -29,16 +27,23 @@
         <p>Cursor-Index: {{cursor}}</p>
     </code>
 
-    <div class="my-2 space-x-4"
-         kmKeysContainer="List-Controls" [strategy]="strategyOptions.bubble()">
+    <div class="my-2 space-x-4">
         <button class="p-2 bg-green-200 rounded"
-                kmKeyBinding key="ctrl + S" (action)="saveList()" (click)="saveList()">
+                kmKeyBinding key="ctrl + S" (action)="saveSelection()" label="Auswahl speichern"
+                (click)="saveSelection()">
             Save
         </button>
         <button class="p-2 bg-red-200 rounded"
-                kmKeyBinding key="ctrl + R" (action)="resetList()" (click)="resetList()">
+                kmKeyBinding key="ctrl + R" (action)="resetSelection()" label="Auswahl zurücksetzen"
+                (click)="resetSelection()">
             Reset
         </button>
     </div>
 
+</div>
+
+<div class="text-gray-500">
+    <h2 class="text-2xl">Focus rest area</h2>
+    <p>Whipe away all shortcuts by tabbing into this area</p>
+    <textarea readonly></textarea>
 </div>
