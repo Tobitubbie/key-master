@@ -35,10 +35,14 @@ export class ListNavigationComponent implements OnInit {
   ];
 
   listKeyMap: Array<{key: string; action: VoidFunction; label?: string; strategy?: VisualizationStrategy; multi?: boolean }> = [
-    { key: 'ArrowUp', action: this.movePrevious.bind(this), label: 'Vorheriges Element auswählen', strategy: this.visualizationStrategyOptions.noop() },
+    { key: 'ArrowUp', action: this.movePrevious.bind(this), label: 'Vorheriges Element auswählen' },
     { key: 'ArrowDown', action: this.moveNext.bind(this), label: 'Nächstes Element auswählen' },
     { key: 'Enter', action: this.toggle.bind(this), label: 'Element (de)selektieren' },
-    { key: 'Space', action: this.toggle.bind(this), label: 'Element (de)selektieren', strategy: this.visualizationStrategyOptions.noop() },
+
+    // enter-alias: space (nooped visualization)
+    { key: 'Space', action: this.toggle.bind(this), label: 'Element (de)selektieren',
+      strategy: this.visualizationStrategyOptions.noop()
+    },
   ];
 
   toggle() {
