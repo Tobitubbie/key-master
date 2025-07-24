@@ -29,7 +29,7 @@ type Page = {
   templateUrl: 'overlay.component.html',
   styleUrls: ['overlay.component.scss'],
   standalone: true,
-  imports: [NgForOf, KeyValuePipe, AsyncPipe, NgIf, SymbolizeKeyPipe, NumberIteratorPipe, NgClass, JsonPipe, NgStyle],
+  imports: [NgIf, SymbolizeKeyPipe, NumberIteratorPipe, NgStyle],
   animations: [
     trigger('zoom', [
       transition(':enter', useAnimation(zoomIn)),
