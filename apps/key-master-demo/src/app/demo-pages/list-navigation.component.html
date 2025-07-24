@@ -1,49 +1,92 @@
-<p>list-navigation works!</p>
+<h1 class="text-4xl m-4" id="list-label">Liste der Planeten in unserem Sonnensystem</h1>
 
-<!-- centering -->
-<div class="flex flex-col items-center" kmKeysContainer="List">
+<button (click)="toggleMode()">Toggle Mode: "{{mode}}"</button>
 
-    <h1 class="text-4xl m-4" id="list-label">Liste der Planeten in unserem Sonnensystem</h1>
+<div class="flex m-4">
 
-    <ul role="listbox" tabindex="0" aria-labelledby="list-label"
+  <div class="flex flex-1 flex-col items-center" kmKeysContainer="List">
+
+    <!-- Planet-List -->
+    <ul class=""
+        role="listbox" tabindex="0" aria-labelledby="list-label"
         [kmMultiKeyBindings]="listKeyMap"
-        [multiStrategy]="visualizationStrategyOptions.inline()">
+        [multiStrategy]="visualizationStrategyOptions.noop()">
 
-        @for (planet of planets; track planet; let i = $index) {
-            <li class="w-96 text-center p-4 cursor-pointer select-none"
-                role="option"
-                [attr.id]="'planet-'+i"
-                [class.focused]="cursor === i"
-                [attr.aria-selected]="planet.selected" (click)="cursor = i; planet.selected = !planet.selected">
-                {{ planet.label }}
-            </li>
-        }
+      @for (planet of planets; track planet; let i = $index) {
+        <li class="w-96 text-center p-4 cursor-pointer select-none"
+            role="option"
+            [attr.id]="'planet-'+i"
+            [class.focused]="cursor === i"
+            [attr.aria-selected]="planet.selected" (click)="cursor = i; planet.selected = !planet.selected">
+          {{ planet.label }}
+        </li>
+      }
 
     </ul>
 
-    <hr class="w-1/2 my-2">
+    <!--  PROBLEM  -->
+    <!-- Actions in the same container -> focus on button + click -> not working because space/enter for de-/selection of list. -->
+    <!-- Action outside the container -> keybindings have no container -> options: second container -> meh, temporary global keybindings -> meh, hmm... -->
 
-    <code>
-        <p>Cursor-Index: {{cursor}}</p>
-    </code>
+    <!-- "Grouped" List-Actions (same container)-->
+    @if (mode === 'grouped') {
 
-    <div class="my-2 space-x-4">
+      <hr class="w-1/2 my-2">
+
+      <code>
+        <p>Cursor-Index: {{ cursor }}</p>
+        <p>Saved Planets: [{{ lastSavedPlanets }}]</p>
+      </code>
+
+      <div class="my-2 space-x-4">
         <button class="p-2 bg-green-200 rounded"
                 kmKeyBinding key="ctrl + S" (action)="saveSelection()" label="Auswahl speichern"
                 (click)="saveSelection()">
-            Save
+          Save
         </button>
         <button class="p-2 bg-red-200 rounded"
                 kmKeyBinding key="ctrl + R" (action)="resetSelection()" label="Auswahl zurücksetzen"
                 (click)="resetSelection()">
-            Reset
+          Reset
         </button>
+      </div>
+    }
+
+  </div>
+
+  <!-- "Separated" List-Actions (separated container)-->
+  @if (mode === 'separated') {
+    <div kmKeysContainer="List-Actions" class="flex flex-col flex-1">
+
+      <h2 class="text-2xl my-4" id="list-label">List-Actions</h2>
+
+      <div class="flex flex-col gap-4">
+
+        <code>
+          <p>Cursor-Index: {{ cursor }}</p>
+          <p>Saved Planets: [{{ lastSavedPlanets }}]</p>
+        </code>
+
+        <button class="p-2 bg-green-200 rounded"
+                kmKeyBinding key="ctrl + S" (action)="saveSelection()" label="Auswahl speichern"
+                (click)="saveSelection()">
+          Save
+        </button>
+        <button class="p-2 bg-red-200 rounded"
+                kmKeyBinding key="ctrl + R" (action)="resetSelection()" label="Auswahl zurücksetzen"
+                (click)="resetSelection()">
+          Reset
+        </button>
+
+      </div>
+
     </div>
+  }
 
 </div>
 
 <div class="text-gray-500">
-    <h2 class="text-2xl">Focus rest area</h2>
-    <p>Whipe away all shortcuts by tabbing into this area</p>
-    <textarea readonly></textarea>
+  <h2 class="text-2xl">Focus rest area</h2>
+  <p>Whipe away all shortcuts by tabbing into this area</p>
+  <textarea readonly></textarea>
 </div>
