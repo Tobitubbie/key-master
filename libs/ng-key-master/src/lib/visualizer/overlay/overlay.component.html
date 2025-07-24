@@ -16,7 +16,8 @@
               <!-- Group-Name -->
               <p class="whitespace-nowrap font-bold text-xl"
                  [class.text-neutral-500]="containerName !== currentPage()?.containerName"
-                 data-test="group-name">
+                 data-test="group-name"
+                 (mouseenter)="selectPage_byContainerName(containerName)">
                 {{ containerName }}
               </p>
 

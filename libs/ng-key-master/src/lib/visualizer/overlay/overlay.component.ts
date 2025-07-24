@@ -143,4 +143,13 @@ export class OverlayComponent {
   previousPage() {
     this.currentPageIndex.update(currentPage => Math.max(0, currentPage - 1));
   }
+
+  selectPage_byContainerName(containerName: string) {
+    if (this.currentPage()?.containerName === containerName) return; // noop if container already selected
+
+    const firstPageIndex = this.pages().findIndex(p => p.containerName === containerName);
+    if (firstPageIndex > -1) {
+      this.currentPageIndex.set(firstPageIndex);
+    }
+  }
 }
